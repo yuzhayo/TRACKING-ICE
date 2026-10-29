@@ -1,0 +1,20 @@
+{
+  "apiUrl": "https://script.google.com/macros/s/AKfycbxQKSdUx-tp6yNWuoGf4g8ZVdtKzAUdOv3LJxfqfuz0AwzaeBj-DQC_7rCIqt12-Est/exec",
+  "token": "anti-spam-bukan-rahasia",
+  "requestTimeoutMs": 45000,
+  "image": {
+    "maxSize": 1600,
+    "quality": 0.7,
+    "cropFrameRatio": 0.75,
+    "cropPadColor": "#ffffff",
+    "cropContract": 1
+  },
+  "limits": {
+    "nominalMaxDigits": 12,
+    "nominalMax": 15000,
+    "outletMaxLen": 80
+  },
+  "labels": {
+    "title": "Tracking Ice"
+  }
+}

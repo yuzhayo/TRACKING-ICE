@@ -1,0 +1,207 @@
+/* ============================================================
+   TRACKING-ICE - motion
+
+   The only file in this project that contains animation.
+   Placeholders import this file. They keep geometry and pose,
+   never motion.
+
+   Sections follow the screen from top to bottom.
+   ============================================================ */
+
+
+/* ============================================================
+   SECTION 1 - WHEEL ROW  (expand / collapse of rows 1 and 3)
+   used by  src/wheel-row.svelte
+   ============================================================ */
+
+.wheel-row.variant-top:not(.closed):not(.closing) {
+  animation: slide-in-up-bounce 450ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.wheel-row.variant-bottom:not(.closed):not(.closing) {
+  animation: slide-in-down-bounce 450ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.wheel-row.variant-top.closing {
+  animation: slide-out-down-impact 300ms ease-in forwards;
+}
+
+.wheel-row.variant-bottom.closing {
+  animation: slide-out-up-impact 300ms ease-in forwards;
+}
+
+@keyframes slide-in-up-bounce {
+  from { opacity: 0; transform: translate3d(0, 100%, 0); }
+  55%  { opacity: 1; transform: translate3d(0, 0, 0); }
+  75%  { transform: translate3d(0, 6%, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes slide-in-down-bounce {
+  from { opacity: 0; transform: translate3d(0, -100%, 0); }
+  55%  { opacity: 1; transform: translate3d(0, 0, 0); }
+  75%  { transform: translate3d(0, -6%, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes slide-out-down-impact {
+  from { opacity: 1; transform: translate3d(0, 0, 0); }
+  30%  { transform: translate3d(0, -2%, 0); }
+  to   { opacity: 0; transform: translate3d(0, 100%, 0); }
+}
+
+@keyframes slide-out-up-impact {
+  from { opacity: 1; transform: translate3d(0, 0, 0); }
+  30%  { transform: translate3d(0, 2%, 0); }
+  to   { opacity: 0; transform: translate3d(0, -100%, 0); }
+}
+
+
+/* ============================================================
+   SECTION 2 - OPTION LIST  (carousel reveal / collapse)
+   used by  src/option-list-placeholder.svelte
+   The list opens from the center line and closes back to it.
+   Independent of the wheel rows above.
+   ============================================================ */
+
+.option-list.revealing {
+  animation: wheel-clip-reveal 450ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.option-list.collapsing {
+  animation: wheel-clip-collapse 300ms ease-in forwards;
+}
+
+@keyframes wheel-clip-reveal {
+  from { clip-path: inset(50% 0% 50% 0%); }
+  to   { clip-path: inset(0% 0% 0% 0%); }
+}
+
+@keyframes wheel-clip-collapse {
+  from { clip-path: inset(0% 0% 0% 0%); }
+  to   { clip-path: inset(50% 0% 50% 0%); }
+}
+
+
+/* ============================================================
+   SECTION 3 - CENTER BUMP
+   used by  src/wheel-row.svelte  (center text)
+   The centered option pops when a new one lands in row 2.
+   ============================================================ */
+
+.wheel-row-text {
+  animation: wheel-bump 260ms ease-out both;
+}
+
+@keyframes wheel-bump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.14); }
+  70%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+
+/* ============================================================
+   SECTION 4 - ACTION PLACEHOLDER
+   used by  src/action-placeholder.svelte
+   ============================================================ */
+
+.action-placeholder.out {
+  animation: action-out-impact 300ms cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+}
+
+.action-placeholder.in {
+  animation: action-in-impact 450ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes action-out-impact {
+  from { opacity: 1; transform: translate3d(0, 0, 0); }
+  30%  { transform: translate3d(0, -1.5dvh, 0); }
+  to   { opacity: 0; transform: translate3d(0, 200dvh, 0); }
+}
+
+@keyframes action-in-impact {
+  from { opacity: 0; transform: translate3d(0, 200dvh, 0); }
+  70%  { opacity: 1; transform: translate3d(0, -3dvh, 0); }
+  85%  { transform: translate3d(0, 1.5dvh, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+
+/* ============================================================
+   SECTION 5 - TEMP ROW REVEAL
+   used by  src/temp-row.svelte
+   A row starts hidden; when its answer is set it slides up.
+   ============================================================ */
+
+.temp-row:not(.revealed) {
+  opacity: 0;
+  transform: translate3d(0, 100%, 0);
+  pointer-events: none;
+}
+
+.temp-row.revealed {
+  animation: temp-row-slide-up 450ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes temp-row-slide-up {
+  from { opacity: 0; transform: translate3d(0, 100%, 0); }
+  50%  { opacity: 1; transform: translate3d(0, -8%, 0); }
+  70%  { transform: translate3d(0, 4%, 0); }
+  85%  { transform: translate3d(0, -2%, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+
+/* ============================================================
+   SECTION 6 - REDUCED MOTION
+   Same end states as the keyframes above, applied instantly.
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel-row.variant-top:not(.closed):not(.closing),
+  .wheel-row.variant-bottom:not(.closed):not(.closing) {
+    animation: none;
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .wheel-row.variant-top.closing,
+  .wheel-row.variant-bottom.closing {
+    animation: none;
+    opacity: 0;
+  }
+
+  .option-list.revealing {
+    animation: none;
+    clip-path: inset(0% 0% 0% 0%);
+  }
+
+  .option-list.collapsing {
+    animation: none;
+    clip-path: inset(50% 0% 50% 0%);
+  }
+
+  .wheel-row-text {
+    animation: none;
+    transform: scale(1);
+  }
+
+  .action-placeholder.out {
+    animation: none;
+    opacity: 0;
+    transform: translate3d(0, 200dvh, 0);
+  }
+
+  .action-placeholder.in {
+    animation: none;
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .temp-row.revealed {
+    animation: none;
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
