@@ -1,11 +1,12 @@
 <script>
   import './motion/animations.css'
+  import { box } from './lib/layout.svelte'
 
   let {
+    path = '',
     label = '',
     text = '',
     revealed = false,
-    height = '11%',
     onClick = () => {}
   } = $props()
 
@@ -26,7 +27,7 @@
   tabindex={revealed ? 0 : -1}
   aria-disabled={!revealed}
   aria-label={`Ubah jawaban ${label}`}
-  style="height: {height};"
+  style={box(path)}
   onclick={() => revealed && onClick()}
   onkeydown={handleKeydown}
 >
@@ -40,10 +41,8 @@
 
 <style>
   .temp-row {
-    position: relative;
-    width: 100%;
+    position: absolute;
     box-sizing: border-box;
-    flex: 0 0 auto;
     container-type: size;
     background: rgba(15, 23, 42, 0.35);
   }

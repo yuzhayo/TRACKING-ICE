@@ -1,16 +1,12 @@
 <script>
   import WheelRow from './wheel-row.svelte'
   import OptionListPlaceholder from './option-list-placeholder.svelte'
+  import { box } from './lib/layout.svelte'
 
   let {
-    left = '0%',
-    top = '0%',
-    width = '100%',
-    height = '100%',
+    path = '',
     hidden = false,
     open = false,
-    row2Top,
-    row2Height,
     options = [],
     prompt = '',
     selected = '',
@@ -40,41 +36,32 @@
   class="wheel-placeholder"
   class:hidden={hidden}
   aria-label="Wheel placeholder"
-  style="left: {left}; top: {top}; width: {width}; height: {height};"
+  style={box(path)}
 >
   <WheelRow
+    path={`${path}.row1`}
     variant="top"
     label="Wheel row 1"
-    left="0%"
-    top="0%"
-    width="100%"
-    height="40%"
     open={open}
     closing={closing}
   />
 
-  <OptionListPlaceholder {open} {options} {selected} onHighlight={(v) => highlight = v} />
+  <OptionListPlaceholder path={`${path}.list`} {open} {options} {selected} onHighlight={(v) => highlight = v} />
 
   <WheelRow
+    path={`${path}.row2`}
     variant="center"
     label="Wheel row 2"
     text={centerText}
     bumpKey={centerText}
-    left="0%"
-    top={`${row2Top}%`}
-    width="100%"
-    height={`${row2Height}%`}
     open={true}
     onClick={handleCenterClick}
   />
 
   <WheelRow
+    path={`${path}.row3`}
     variant="bottom"
     label="Wheel row 3"
-    left="0%"
-    top="60%"
-    width="100%"
-    height="40%"
     open={open}
     closing={closing}
   />

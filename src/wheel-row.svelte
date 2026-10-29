@@ -1,11 +1,9 @@
 <script>
   import './motion/animations.css'
+  import { box } from './lib/layout.svelte'
 
   let {
-    left = '0%',
-    top = '0%',
-    width = '100%',
-    height = '100%',
+    path = '',
     variant = 'center',
     label = 'Wheel row',
     text = '',
@@ -28,11 +26,11 @@
   type="button"
   aria-label={label}
   disabled={!isCenter && !open}
-  style="left: {left}; top: {top}; width: {width}; height: {height};"
+  style={box(path)}
   onclick={onClick}
 >
   {#if text}
-    <span class="wheel-row-text" {key}>{text}</span>
+    <span class="wheel-row-text" key={bumpKey}>{text}</span>
   {/if}
 </button>
 
@@ -57,17 +55,14 @@
 
   .variant-top {
     background-color: rgba(56, 189, 248, 0.10);
-    z-index: 1;
   }
 
   .variant-bottom {
     background-color: rgba(52, 211, 153, 0.10);
-    z-index: 1;
   }
 
   .variant-center {
     background-color: rgba(167, 139, 250, 0.12);
-    z-index: 3;
   }
 
   .variant-top.closed {

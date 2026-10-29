@@ -1,7 +1,9 @@
 <script>
   import './motion/animations.css'
+  import { box } from './lib/layout.svelte'
 
   let {
+    path = '',
     open = false,
     options = [],
     selected = '',
@@ -71,6 +73,7 @@
   bind:this={listEl}
   role="listbox"
   aria-label="Daftar pilihan"
+  style={box(path)}
   onscroll={handleScroll}
   onanimationend={handleAnimationEnd}
 >
@@ -82,8 +85,6 @@
 <style>
   .option-list {
     position: absolute;
-    inset: 0%;
-    z-index: 2;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     overscroll-behavior: contain;

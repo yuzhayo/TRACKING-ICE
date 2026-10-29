@@ -3,12 +3,14 @@
     onDigit = () => {},
     onDelete = () => {},
     onClear = () => {},
-    onConfirm = () => {}
+    onConfirm = () => {},
+    confirmDisabled = false
   }: {
     onDigit?: (digit: string) => void
     onDelete?: () => void
     onClear?: () => void
     onConfirm?: () => void
+    confirmDisabled?: boolean
   } = $props()
 
   const digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -57,7 +59,7 @@
 
   <button type="button" onclick={() => onDigit('0')}>0</button>
 
-  <button type="button" class="pad-ok" onclick={onConfirm}>OK</button>
+  <button type="button" class="pad-ok" disabled={confirmDisabled} onclick={onConfirm}>OK</button>
 </section>
 
 <style>
@@ -106,6 +108,12 @@
 
   button.pad-ok:active {
     background: #1d3a4f;
+  }
+
+  button.pad-ok:disabled {
+    opacity: 0.4;
+    cursor: default;
+    background: #142736;
   }
 
   button:focus-visible {

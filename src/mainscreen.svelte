@@ -5,16 +5,13 @@
   import CalendarPlaceholder from './calendar-placeholder.svelte'
   import NominalPlaceholder from './nominal-placeholder.svelte'
   import UploadPlaceholder from './upload-placeholder.svelte'
-  import PopupPlaceholder from './popup-placeholder.svelte'
+  import SendResultPopup from './send-result-popup.svelte'
   import { cropDataUrl, loadImg } from './lib/crop'
   import { loadConfig, readOptionsCache, fetchOptions, submitAnswer } from './lib/api'
+  import { loadLayout } from './lib/layout.svelte'
 
-  const wheelTop = 38
-  const wheelHeight = 40
-  const row2Top = 40
-  const row2Height = 20
-  const questionTop = wheelTop + wheelHeight * row2Top / 100
-  const questionHeight = wheelHeight * row2Height / 100
+  // Geometry comes from public/layout.json - nothing here hardcodes a position.
+  loadLayout()
 
   let currentQuestion = $state(1)
   let answers = $state(['', '', '', '', ''])
@@ -28,7 +25,7 @@
   let cfg = $state(null)
   let submitting = $state(false)
   let resultOpen = $state(false)
-  let resultOk = $state(false)
+  let resultState = $state('idle')
   let resultMsg = $state('')
   let baList = $state([])
   let outletsByBa = $state({})
@@ -226,17 +223,19 @@
   async function submitReport() {
     if (!allAnswered || submitting || !cfg || !uploadCrop) return
     submitting = true
+    resultState = 'sending'
+    resultMsg = ''
+    resultOpen = true
     try {
       const res = await submitAnswer(cfg, buildPayload())
-      resultOk = true
+      resultState = 'ok'
       resultMsg = res.fileName ? `Nomor: ${res.fileName}` : 'Laporan berhasil dikirim.'
       clearFields()
     } catch (err) {
-      resultOk = false
+      resultState = 'fail'
       resultMsg = err instanceof Error ? err.message : 'Kiriman gagal.'
     } finally {
       submitting = false
-      resultOpen = true
     }
   }
 
@@ -286,10 +285,7 @@
 
 <section class="mainscreen">
   <TempPlaceholder
-    left="0%"
-    top="0%"
-    width="100%"
-    height="76%"
+    path="temp"
     {answers}
     cropOriginal={uploadPhoto}
     cropPreview={uploadCropPreview}
@@ -297,20 +293,13 @@
     onSelect={reopenQuestion}
   />
 
-  <div class="question-position" style:top={`${questionTop}%`} style:height={`${questionHeight}%`}>
-    <CalendarPlaceholder hidden={!showCalendar} {expanded} value={dateKey} onSelect={answerDate} onExpandedChange={handleExpanded} />
-    <NominalPlaceholder hidden={!showNominal} {expanded} value={nominalDigits} onConfirm={answerNominal} onExpandedChange={handleExpanded} />
-    <UploadPlaceholder hidden={!showUpload} {expanded} photo={uploadPhoto} crop={uploadCrop} onPhoto={acceptPhoto} onCrop={setUploadCrop} onConfirm={answerUpload} onExpandedChange={handleExpanded} />
-  </div>
+  <CalendarPlaceholder path="calendar" hidden={!showCalendar} {expanded} value={dateKey} onSelect={answerDate} onExpandedChange={handleExpanded} />
+  <NominalPlaceholder path="nominal" hidden={!showNominal} {expanded} value={nominalDigits} max={cfg ? cfg.limits.nominalMax : 15000} onConfirm={answerNominal} onExpandedChange={handleExpanded} />
+  <UploadPlaceholder path="upload" hidden={!showUpload} {expanded} photo={uploadPhoto} crop={uploadCrop} onPhoto={acceptPhoto} onCrop={setUploadCrop} onConfirm={answerUpload} onExpandedChange={handleExpanded} />
 
   <WheelPlaceholder
+    path="wheel"
     hidden={!showWheel}
-    left="0%"
-    top={`${wheelTop}%`}
-    width="100%"
-    height={`${wheelHeight}%`}
-    {row2Top}
-    {row2Height}
     open={expanded}
     options={currentWheelOptions}
     prompt={wheelPrompts[currentQuestion]}
@@ -320,11 +309,8 @@
   />
 
   <ActionPlaceholder
+    path="action"
     hidden={actionHidden}
-    left="0%"
-    top="78%"
-    width="100%"
-    height="19%"
     in={actionIn}
     out={actionOut}
     onInEnd={handleActionInEnd}
@@ -334,12 +320,7 @@
     confirmReady={allAnswered}
   />
 
-  <PopupPlaceholder open={resultOpen} title={resultOk ? 'Terkirim' : 'Belum Terkirim'} onClose={() => resultOpen = false}>
-    <div class="result-body" class:ok={resultOk}>
-      <p class="result-line">{resultOk ? 'REPORT TERKIRIM' : 'REPORT BELUM TERKIRIM'}</p>
-      <p class="result-detail">{resultMsg}</p>
-    </div>
-  </PopupPlaceholder>
+  <SendResultPopup open={resultOpen} state={resultState} message={resultMsg} onClose={() => resultOpen = false} />
 </section>
 
 <style>
@@ -349,41 +330,5 @@
     width: 100%;
     height: 100%;
     background: #0d1420;
-  }
-
-  .question-position {
-    position: absolute;
-    left: 0%;
-    width: 100%;
-    z-index: 1;
-  }
-
-  .result-body {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4%;
-    text-align: center;
-    container-type: size;
-  }
-
-  .result-line {
-    margin: 0;
-    font-size: min(7cqi, 7cqb);
-    font-weight: 800;
-    color: #f87171;
-  }
-
-  .result-body.ok .result-line {
-    color: #4ade80;
-  }
-
-  .result-detail {
-    margin: 0;
-    font-size: min(4cqi, 4cqb);
-    color: #cbd5e1;
-    word-break: break-word;
   }
 </style>

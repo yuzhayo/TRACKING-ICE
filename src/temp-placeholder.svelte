@@ -1,11 +1,9 @@
 <script>
   import TempRow from './temp-row.svelte'
+  import { box } from './lib/layout.svelte'
 
   let {
-    left = '0%',
-    top = '0%',
-    width = '100%',
-    height = '100%',
+    path = '',
     hidden = false,
     answers = ['', '', '', '', ''],
     cropOriginal = '',
@@ -19,24 +17,26 @@
   class="temp-placeholder"
   class:hidden={hidden}
   aria-label="Temp placeholder"
-  style="left: {left}; top: {top}; width: {width}; height: {height};"
+  style={box(path)}
 >
-  <TempRow label="1" text={answers[0]} revealed={!!answers[0]} onClick={() => onSelect(1)} />
-  <TempRow label="2" text={answers[1]} revealed={!!answers[1]} onClick={() => onSelect(2)} />
-  <TempRow label="3" text={answers[2]} revealed={!!answers[2]} onClick={() => onSelect(3)} />
-  <TempRow label="4" text={answers[3]} revealed={!!answers[3]} onClick={() => onSelect(4)} />
+  <TempRow path={`${path}.row1`} label="1" text={answers[0]} revealed={!!answers[0]} onClick={() => onSelect(1)} />
+  <TempRow path={`${path}.row2`} label="2" text={answers[1]} revealed={!!answers[1]} onClick={() => onSelect(2)} />
+  <TempRow path={`${path}.row3`} label="3" text={answers[2]} revealed={!!answers[2]} onClick={() => onSelect(3)} />
+  <TempRow path={`${path}.row4`} label="4" text={answers[3]} revealed={!!answers[3]} onClick={() => onSelect(4)} />
 
   {#if hasCrop}
-    <div class="crop-pair" aria-label="Pratinjau crop">
+    <div class="crop-pair" aria-label="Pratinjau crop" style={box(`${path}.row5`)}>
       <div class="crop-section">
         <div class="crop-child"><img src={cropOriginal} alt="Foto asli" /></div>
       </div>
       <div class="crop-section">
-        <div class="crop-child"><img src={cropPreview} alt="Hasil crop" /></div>
+        <button type="button" class="crop-child crop-edit" aria-label="Ubah crop" onclick={() => onSelect(5)}>
+          <img src={cropPreview} alt="Hasil crop" />
+        </button>
       </div>
     </div>
   {:else}
-    <TempRow label="5" text="" revealed={false} onClick={() => onSelect(5)} />
+    <TempRow path={`${path}.row5`} label="5" text="" revealed={false} onClick={() => onSelect(5)} />
   {/if}
 </section>
 
@@ -44,12 +44,7 @@
   .temp-placeholder {
     --temp-edge-color: rgba(248, 113, 133, 0.55);
     position: absolute;
-    z-index: 0;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    gap: 2%;
-    padding: 0 3%;
     pointer-events: none;
     background-image:
       linear-gradient(var(--temp-edge-color), var(--temp-edge-color)),
@@ -67,8 +62,8 @@
 
   /* Row 5: two equal sections, each holding a 3:4 child placeholder. */
   .crop-pair {
-    flex: 1 1 auto;
-    min-height: 0;
+    position: absolute;
+    box-sizing: border-box;
     display: flex;
     gap: 3%;
   }
@@ -96,5 +91,17 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* The cropped thumb is a button: tap it to reopen the crop selection. */
+  .crop-edit {
+    pointer-events: auto;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
   }
 </style>

@@ -3,16 +3,14 @@
 
   let {
     open = false,
-    title,
     children,
-    onClose,
-    showClose = true
+    onClose = () => {},
+    dismissible = true
   }: {
     open?: boolean
-    title: string
-    children: Snippet
-    onClose: () => void
-    showClose?: boolean
+    children?: Snippet
+    onClose?: () => void
+    dismissible?: boolean
   } = $props()
 
   let dialog = $state<HTMLDialogElement>()
@@ -22,18 +20,21 @@
     if (open && !dialog.open) dialog.showModal()
     if (!open && dialog.open) dialog.close()
   })
+
+  // Tap anywhere closes the popup, except on an interactive control (a button),
+  // so the date grid's nav and cells keep working.
+  function handleClick(event: MouseEvent) {
+    if (!dismissible) return
+    const target = event.target as HTMLElement | null
+    if (target && target.closest('button')) return
+    onClose()
+  }
 </script>
 
-<dialog bind:this={dialog} class="popup-placeholder" aria-label={title} onclose={onClose}>
+<dialog bind:this={dialog} class="popup-placeholder" aria-label="Popup" onclick={handleClick} onclose={onClose}>
   <section class="popup-panel">
-    <header>
-      <h2>{title}</h2>
-      {#if showClose}
-        <button type="button" aria-label="Tutup popup" onclick={() => dialog?.close()}>Tutup</button>
-      {/if}
-    </header>
     <div class="popup-content">
-      {@render children()}
+      {#if children}{@render children()}{/if}
     </div>
   </section>
 </dialog>
@@ -65,8 +66,7 @@
 
   .popup-panel {
     container-type: size;
-    display: grid;
-    grid-template-rows: 14% 86%;
+    box-sizing: border-box;
     width: min(92%, 110dvh);
     height: min(82%, 125dvw);
     background: #0d1420;
@@ -74,35 +74,10 @@
     outline-offset: 0;
   }
 
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-inline: 4%;
-  }
-
-  h2 {
-    margin: 0;
-    font-size: min(5cqi, 5cqb);
-    font-weight: 600;
-  }
-
-  button {
-    border: 0;
-    padding: 2% 3%;
-    background: #243047;
-    color: inherit;
-    font: inherit;
-    font-size: min(4cqi, 4cqb);
-    cursor: pointer;
-  }
-
-  button:focus-visible {
-    outline: 0.4cqi solid #f8fafc;
-  }
-
   .popup-content {
-    min-height: 0;
-    padding: 0% 3% 3%;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 3%;
   }
 </style>

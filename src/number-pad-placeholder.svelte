@@ -5,17 +5,19 @@
     onDigit = () => {},
     onDelete = () => {},
     onClear = () => {},
-    onConfirm = () => {}
+    onConfirm = () => {},
+    confirmDisabled = false
   }: {
     onDigit?: (digit: string) => void
     onDelete?: () => void
     onClear?: () => void
     onConfirm?: () => void
+    confirmDisabled?: boolean
   } = $props()
 </script>
 
 <section class="number-pad-placeholder" aria-label="Number pad placeholder">
-  <NumberPad {onDigit} {onDelete} {onClear} {onConfirm} />
+  <NumberPad {onDigit} {onDelete} {onClear} {onConfirm} {confirmDisabled} />
 </section>
 
 <style>

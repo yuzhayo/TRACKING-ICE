@@ -1,14 +1,17 @@
 <script lang="ts">
   import PopupPlaceholder from './popup-placeholder.svelte'
   import DateGrid from './date-grid.svelte'
+  import { box } from './lib/layout.svelte'
 
   let {
+    path = '',
     hidden = false,
     expanded = false,
     value = '',
     onSelect = () => {},
     onExpandedChange = () => {}
   }: {
+    path?: string
     hidden?: boolean
     expanded?: boolean
     value?: string
@@ -21,7 +24,7 @@
     : 'Pilih tanggal nota')
 </script>
 
-<section class="calendar-placeholder" {hidden} aria-label="Calendar placeholder">
+<section class="calendar-placeholder" {hidden} aria-label="Calendar placeholder" style={box(path)}>
   <button
     class="calendar-trigger"
     type="button"
@@ -31,7 +34,7 @@
     onclick={() => onExpandedChange(true)}
   >{displayDate}</button>
 
-  <PopupPlaceholder open={expanded && !hidden} title="Tanggal nota" onClose={() => onExpandedChange(false)}>
+  <PopupPlaceholder open={expanded && !hidden} onClose={() => onExpandedChange(false)}>
     {#if expanded}
       <DateGrid value={value} onSelect={(dateKey) => { onSelect(dateKey); onExpandedChange(false) }} />
     {/if}
@@ -41,7 +44,6 @@
 <style>
   .calendar-placeholder {
     position: absolute;
-    inset: 0%;
     container-type: size;
   }
 

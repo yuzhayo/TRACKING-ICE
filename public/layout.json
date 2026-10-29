@@ -1,0 +1,43 @@
+{
+  "temp": {
+    "top": 0,
+    "left": 0,
+    "width": 100,
+    "height": 76,
+    "z": 0,
+    "children": {
+      "row1": { "top": 2, "left": 3, "width": 94, "height": 11, "z": 1 },
+      "row2": { "top": 15, "left": 3, "width": 94, "height": 11, "z": 1 },
+      "row3": { "top": 28, "left": 3, "width": 94, "height": 11, "z": 1 },
+      "row4": { "top": 41, "left": 3, "width": 94, "height": 11, "z": 1 },
+      "row5": { "top": 54, "left": 3, "width": 94, "height": 42, "z": 1 }
+    }
+  },
+  "wheel": {
+    "top": 38,
+    "left": 0,
+    "width": 100,
+    "height": 40,
+    "z": 1,
+    "children": {
+      "row1": { "top": 0, "left": 0, "width": 100, "height": 40, "z": 1 },
+      "list": { "top": 0, "left": 0, "width": 100, "height": 100, "z": 2 },
+      "row2": { "top": 40, "left": 0, "width": 100, "height": 20, "z": 3 },
+      "row3": { "top": 60, "left": 0, "width": 100, "height": 40, "z": 1 }
+    }
+  },
+  "calendar": { "top": 54, "left": 0, "width": 100, "height": 8, "z": 2 },
+  "nominal": { "top": 54, "left": 0, "width": 100, "height": 8, "z": 2 },
+  "upload": { "top": 54, "left": 0, "width": 100, "height": 8, "z": 2 },
+  "action": {
+    "top": 78,
+    "left": 0,
+    "width": 100,
+    "height": 19,
+    "z": 1,
+    "children": {
+      "reset": { "top": 30, "left": 6.6667, "width": 40, "height": 35, "z": 1 },
+      "confirm": { "top": 30, "left": 53.3333, "width": 40, "height": 35, "z": 1 }
+    }
+  }
+}

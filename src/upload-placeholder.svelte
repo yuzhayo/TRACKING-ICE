@@ -1,9 +1,12 @@
 <script lang="ts">
   import FrameCropper from './frame-cropper.svelte'
+  import CropInstructionPopup from './crop-instruction-popup.svelte'
   import { compressImage } from './lib/image'
-  import type { CropTransform } from './lib/crop'
+  import { box } from './lib/layout.svelte'
+  import { IDENTITY, type CropTransform } from './lib/crop'
 
   let {
+    path = '',
     hidden = false,
     expanded = false,
     photo = '',
@@ -13,6 +16,7 @@
     onConfirm = () => {},
     onExpandedChange = () => {}
   }: {
+    path?: string
     hidden?: boolean
     expanded?: boolean
     photo?: string
@@ -30,6 +34,17 @@
   let fileInput = $state<HTMLInputElement>()
   let busy = $state(false)
   let error = $state('')
+  let instrOpen = $state(false)
+
+  // A crop is "not cropped" when it is still the untouched original framing.
+  function isIdentity(t: CropTransform): boolean {
+    return (
+      Math.abs(t.rot - IDENTITY.rot) < 0.5 &&
+      Math.abs(t.zoom - IDENTITY.zoom) < 0.01 &&
+      Math.abs(t.px - IDENTITY.px) < 0.01 &&
+      Math.abs(t.py - IDENTITY.py) < 0.01
+    )
+  }
 
   function openPicker() {
     fileInput?.click()
@@ -50,6 +65,7 @@
       const compressed = await compressImage(file, MAX_SIZE, QUALITY)
       onPhoto(compressed.dataUrl, compressed.base64)
       onExpandedChange(true)
+      instrOpen = true
     } catch (err) {
       error = err instanceof Error ? err.message : 'Foto gagal diproses.'
     } finally {
@@ -59,13 +75,17 @@
   }
 
   function commitCrop(transform: CropTransform) {
+    if (isIdentity(transform)) {
+      instrOpen = true
+      return
+    }
     onCrop(transform)
     onConfirm('Foto siap')
     onExpandedChange(false)
   }
 </script>
 
-<section class="upload-placeholder" {hidden} aria-label="Upload placeholder">
+<section class="upload-placeholder" {hidden} aria-label="Upload placeholder" style={box(path)}>
   <input
     bind:this={fileInput}
     class="file-input"
@@ -98,10 +118,11 @@
   </div>
 {/if}
 
+<CropInstructionPopup open={instrOpen} onClose={() => instrOpen = false} />
+
 <style>
   .upload-placeholder {
     position: absolute;
-    inset: 0%;
     container-type: size;
   }
 

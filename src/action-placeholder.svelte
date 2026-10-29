@@ -2,12 +2,10 @@
   import ResetButton from './reset-button.svelte'
   import ConfirmButton from './confirm-button.svelte'
   import './motion/animations.css'
+  import { box } from './lib/layout.svelte'
 
   let {
-    left = '0%',
-    top = '0%',
-    width = '100%',
-    height = '100%',
+    path = '',
     hidden = false,
     out = false,
     in: enter = false,
@@ -34,7 +32,7 @@
   class:out={out}
   class:in={enter}
   aria-label="Action button area"
-  style="left: {left}; top: {top}; width: {width}; height: {height};"
+  style={box(path)}
   onanimationend={handleAnimationEnd}
 >
   <span class="edge edge-top" aria-hidden="true"></span>
@@ -43,18 +41,12 @@
   <span class="edge edge-left" aria-hidden="true"></span>
 
   <ResetButton
-    left="6.6667%"
-    top="30%"
-    width="40%"
-    height="35%"
+    path={`${path}.reset`}
     onClick={onReset}
   />
 
   <ConfirmButton
-    left="53.3333%"
-    top="30%"
-    width="40%"
-    height="35%"
+    path={`${path}.confirm`}
     disabled={!confirmReady}
     onClick={onConfirm}
   />

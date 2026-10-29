@@ -1,9 +1,8 @@
 <script>
+  import { box } from './lib/layout.svelte'
+
   let {
-    left = '0%',
-    top = '0%',
-    width = '100%',
-    height = '100%',
+    path = '',
     disabled = false,
     onClick = () => {}
   } = $props()
@@ -15,7 +14,7 @@
   type="button"
   aria-label="Confirm report"
   {disabled}
-  style="left: {left}; top: {top}; width: {width}; height: {height};"
+  style={box(path)}
   onclick={onClick}
 >
   <span class="edge edge-top" aria-hidden="true"></span>
