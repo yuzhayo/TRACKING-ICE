@@ -1,10 +1,14 @@
 <script>
   import { box, paint } from './lib/layout.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
     path = '',
     onClick = () => {}
   } = $props()
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 </script>
 
 <button
@@ -13,9 +17,20 @@
   aria-label="Konfirmasi pilihan"
   style={box(path) + paint(path)}
   onclick={onClick}
-></button>
+>
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
+</button>
 
 <style>
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .confirm-area {
     position: absolute;
     container-type: size;

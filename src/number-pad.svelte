@@ -2,15 +2,17 @@
   import { t, s } from './lib/text.svelte'
 
   let {
+    path = '',
     onDigit = () => {},
     onDelete = () => {},
     onClear = () => {},
     onConfirm = () => {},
     confirmDisabled = false
   }: {
+    path?: string
     onDigit?: (digit: string) => void
     onDelete?: () => void
-    onClear?: () => void
+    onClear?: (event?: Event) => void
     onConfirm?: () => void
     confirmDisabled?: boolean
   } = $props()
@@ -46,23 +48,23 @@
 
 <section class="number-pad" aria-label="Papan angka">
   {#each digits as digit (digit)}
-    <button type="button" style={s('pad.key')} onclick={() => onDigit(digit)}>{digit}</button>
+    <button type="button" style={s(`${path}.key`)} onclick={() => onDigit(digit)}>{digit}</button>
   {/each}
 
   <button
     type="button"
     class="pad-fn"
     aria-label="Ketuk untuk hapus satu angka, tahan untuk hapus semua"
-    style={s('pad.key')}
+    style={s(`${path}.key`)}
     onpointerdown={(event) => { event.preventDefault(); startHold() }}
     onpointerup={endHold}
     onpointerleave={cancelHold}
     onpointercancel={cancelHold}
-  >{t('pad.clear')}</button>
+  >{t(`${path}.clear`)}</button>
 
-  <button type="button" style={s('pad.key')} onclick={() => onDigit('0')}>0</button>
+  <button type="button" style={s(`${path}.key`)} onclick={() => onDigit('0')}>0</button>
 
-  <button type="button" class="pad-ok" style={s('pad.ok')} disabled={confirmDisabled} onclick={onConfirm}>{t('pad.ok')}</button>
+  <button type="button" class="pad-ok" style={s(`${path}.ok`)} disabled={confirmDisabled} onclick={onConfirm}>{t(`${path}.ok`)}</button>
 </section>
 
 <style>
@@ -96,7 +98,7 @@
 
   button.pad-ok {
     background: #142736;
-    box-shadow: inset 0 0 0 0.25cqi #67e8f9;
+    box-shadow: inset 0 0 0 0.35cqi #67e8f9;
   }
 
   button:active {

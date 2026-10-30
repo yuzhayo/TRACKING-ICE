@@ -3,6 +3,7 @@
   import DateGrid from './date-grid.svelte'
   import { box, paint } from './lib/layout.svelte'
   import { t, s } from './lib/text.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
     path = '',
@@ -23,9 +24,15 @@
   const displayDate = $derived(value
     ? dateFormat.format(new Date(Number(value.slice(0, 4)), Number(value.slice(5, 7)) - 1, Number(value.slice(8, 10))))
     : t('calendar.prompt'))
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 </script>
 
 <section class="calendar-placeholder" {hidden} aria-label="Calendar placeholder" style={box(path) + paint(path)}>
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
   <button
     class="calendar-trigger"
     type="button"
@@ -44,7 +51,15 @@
 </section>
 
 <style>
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .calendar-placeholder {
+    position: absolute;
     position: absolute;
     container-type: size;
   }

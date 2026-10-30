@@ -1,6 +1,7 @@
 <script>
   import TempRow from './temp-row.svelte'
   import { box, paint } from './lib/layout.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
     path = '',
@@ -11,6 +12,9 @@
     hasCrop = false,
     onSelect = () => {}
   } = $props()
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 </script>
 
 <section
@@ -19,6 +23,9 @@
   aria-label="Temp placeholder"
   style={box(path) + paint(path)}
 >
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
   <TempRow path={`${path}.row1`} label="1" text={answers[0]} revealed={!!answers[0]} onClick={() => onSelect(1)} />
   <TempRow path={`${path}.row2`} label="2" text={answers[1]} revealed={!!answers[1]} onClick={() => onSelect(2)} />
   <TempRow path={`${path}.row3`} label="3" text={answers[2]} revealed={!!answers[2]} onClick={() => onSelect(3)} />
@@ -41,6 +48,13 @@
 </section>
 
 <style>
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .temp-placeholder {
     position: absolute;
     box-sizing: border-box;

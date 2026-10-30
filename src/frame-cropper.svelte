@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { paint } from './lib/layout.svelte'
   import { t as txt, s } from './lib/text.svelte'
   import {
     IDENTITY,
@@ -13,12 +14,14 @@
   } from './lib/crop'
 
   let {
+    path = 'crop',
     src = '',
     initial = null,
     padColor = '#ffffff',
     onOk = () => {},
     onCancel = () => {}
   }: {
+    path?: string
     src?: string
     initial?: CropTransform | null
     padColor?: string
@@ -142,7 +145,7 @@
 </script>
 
 <!-- Root placeholder: a 1:1 square that follows the viewport. -->
-<div class="frame-cropper">
+<div class="frame-cropper" style={paint(path)}>
   <!-- Child placeholder: the 3:4 crop frame. -->
   <div class="crop-area">
     <div class="crop-frame">

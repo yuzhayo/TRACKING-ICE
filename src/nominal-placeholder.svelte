@@ -3,6 +3,7 @@
   import NominalWarningPopup from './nominal-warning-popup.svelte'
   import { box, paint } from './lib/layout.svelte'
   import { t, s } from './lib/text.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
     path = '',
@@ -25,6 +26,9 @@
   let draft = $state('')
   let warnOpen = $state(false)
   let wasOver = $state(false)
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 
   const overLimit = $derived(draft !== '' && Number(draft) > max)
 
@@ -74,9 +78,12 @@
 </script>
 
 <section class="nominal-placeholder" {hidden} aria-label="Nominal placeholder" style={box(path) + paint(path)}>
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
   {#if expanded}
     <output class="nominal-display" class:invalid={overLimit} aria-label="Nominal nota" aria-live="polite" style={s('nominal.display')}>{displayAmount}</output>
-    <NumberPadPlaceholder onDigit={appendDigit} onDelete={deleteOne} onClear={clearAll} onConfirm={confirm} confirmDisabled={overLimit} />
+    <NumberPadPlaceholder path={`${path}.pad`} onDigit={appendDigit} onDelete={deleteOne} onClear={clearAll} onConfirm={confirm} confirmDisabled={overLimit} />
     <NominalWarningPopup open={warnOpen} {max} onClose={() => warnOpen = false} />
   {:else}
     <button class="nominal-trigger" type="button" aria-label="Nominal nota" style={s('nominal.trigger')} onclick={() => onExpandedChange(true)}>{collapsedLabel}</button>
@@ -84,6 +91,13 @@
 </section>
 
 <style>
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .nominal-placeholder {
     position: absolute;
     container-type: size;

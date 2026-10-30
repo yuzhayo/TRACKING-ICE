@@ -4,6 +4,7 @@
   import ConfirmArea from './confirm-area.svelte'
   import { box, paint } from './lib/layout.svelte'
   import { s } from './lib/text.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
     path = '',
@@ -19,6 +20,9 @@
   let closing = $state(false)
   let prevOpen = $state(false)
   let highlight = $state('')
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 
   $effect(() => {
     if (open && !prevOpen) closing = false
@@ -40,6 +44,9 @@
   aria-label="Wheel placeholder"
   style={box(path) + paint(path)}
 >
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
   <WheelRow
     path={`${path}.row1`}
     variant="top"
@@ -73,6 +80,13 @@
 </section>
 
 <style>
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .wheel-placeholder {
     position: absolute;
     background-image:

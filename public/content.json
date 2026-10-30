@@ -1,5 +1,236 @@
 {
-  "mainscreen": { "render": "image", "src": "/bg.jpg", "fit": "stretch", "scale": 100 },
-  "action.reset": { "render": "btn" },
-  "action.confirm": { "render": "btn" }
+  "mainscreen": {
+    "render": "image",
+    "src": "/bg.jpg",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "temp": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "temp.row1": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "temp.row2": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "temp.row3": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "temp.row4": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "temp.row5": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "temp.row5.original": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "temp.row5.crop": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "wheel": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "wheel.row1": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "wheel.row2": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "wheel.row3": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "wheel.list": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "wheel.confirm": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "calendar": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "calendar.grid": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "calendar.grid.title": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "calendar.grid.weekday": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "calendar.grid.day": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "nominal": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "nominal.trigger": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "nominal.display": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "upload": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "upload.pick": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "upload.change": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "crop": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "crop.frame": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "crop.cancel": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "crop.confirm": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "action": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "action.reset": {
+    "render": "btn"
+  },
+  "action.confirm": {
+    "render": "btn"
+  },
+  "warn": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "instr": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "result": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "nominal.pad": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "nominal.pad.key": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "nominal.pad.clear": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "nominal.pad.ok": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  }
 }

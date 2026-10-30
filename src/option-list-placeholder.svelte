@@ -1,7 +1,8 @@
 <script>
   import './motion/animations.css'
-  import { box } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
   import { s } from './lib/text.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
     path = '',
@@ -10,6 +11,9 @@
     selected = '',
     onHighlight = () => {}
   } = $props()
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 
   let listEl = $state(null)
   let activeIndex = $state(0)
@@ -88,16 +92,26 @@
   bind:this={listEl}
   role="listbox"
   aria-label="Daftar pilihan"
-  style={box(path)}
+  style={box(path) + paint(path)}
   onscroll={handleScroll}
   onanimationend={handleAnimationEnd}
 >
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
   {#each options as option, i (option)}
     <div class="option-item" class:active={open && i === activeIndex} style="opacity: {itemOpacity(i)}; {s(path)}" role="option" aria-selected={i === activeIndex}>{option}</div>
   {/each}
 </div>
 
 <style>
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .option-list {
     position: absolute;
     overflow-y: scroll;

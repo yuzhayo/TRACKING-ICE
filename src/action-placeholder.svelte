@@ -3,6 +3,7 @@
   import ConfirmButton from './confirm-button.svelte'
   import './motion/animations.css'
   import { box, paint } from './lib/layout.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
     path = '',
@@ -15,6 +16,9 @@
     onConfirm = () => {},
     confirmReady = false
   } = $props()
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 
   function handleAnimationEnd(event) {
     if (event.animationName.includes('action-in-impact')) {
@@ -35,6 +39,9 @@
   style={box(path) + paint(path)}
   onanimationend={handleAnimationEnd}
 >
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
   <span class="edge edge-top" aria-hidden="true"></span>
   <span class="edge edge-right" aria-hidden="true"></span>
   <span class="edge edge-bottom" aria-hidden="true"></span>
@@ -53,6 +60,13 @@
 </section>
 
 <style>
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .action-placeholder {
     position: absolute;
     container-type: size;

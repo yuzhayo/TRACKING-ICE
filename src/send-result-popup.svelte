@@ -15,7 +15,7 @@
   } = $props()
 </script>
 
-<PopupPlaceholder {open} dismissible={state !== 'sending'} {onClose}>
+<PopupPlaceholder path="result" open={open} dismissible={state !== 'sending'} {onClose}>
   <div class="result-body" class:ok={state === 'ok'} class:sending={state === 'sending'}>
     {#if state === 'sending'}
       <p class="result-line" style={s('result.line')}>{t('result.sending')}</p>

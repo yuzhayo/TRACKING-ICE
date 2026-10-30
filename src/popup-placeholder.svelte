@@ -1,12 +1,16 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
+  import { paint } from './lib/layout.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
+    path = '',
     open = false,
     children,
     onClose = () => {},
     dismissible = true
   }: {
+    path?: string
     open?: boolean
     children?: Snippet
     onClose?: () => void
@@ -14,6 +18,9 @@
   } = $props()
 
   let dialog = $state<HTMLDialogElement>()
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 
   $effect(() => {
     if (!dialog) return
@@ -32,7 +39,10 @@
 </script>
 
 <dialog bind:this={dialog} class="popup-placeholder" aria-label="Popup" onclick={handleClick} onclose={onClose}>
-  <section class="popup-panel">
+  <section class="popup-panel" style={paint(path)}>
+    {#if ArtComp}
+      <div class="art-layer"><ArtComp {...artProps} /></div>
+    {/if}
     <div class="popup-content">
       {#if children}{@render children()}{/if}
     </div>
@@ -79,5 +89,14 @@
     height: 100%;
     box-sizing: border-box;
     padding: 3%;
+    position: relative;
+    z-index: 1;
+  }
+
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
   }
 </style>

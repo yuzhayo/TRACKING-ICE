@@ -11,7 +11,7 @@
   } = $props()
 </script>
 
-<PopupPlaceholder {open} {onClose}>
+<PopupPlaceholder path="instr" {open} {onClose}>
   <div class="instr-body">
     <p class="instr-line" style={s('instr.crop')}>{t('instr.crop')}</p>
   </div>

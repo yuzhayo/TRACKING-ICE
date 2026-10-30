@@ -16,7 +16,7 @@
   const label = $derived(t('warn.nominal').replaceAll('{max}', fmt.format(max)))
 </script>
 
-<PopupPlaceholder {open} {onClose}>
+<PopupPlaceholder path="warn" {open} {onClose}>
   <div class="warn-body">
     <p class="warn-line" style={s('warn.nominal')}>{label}</p>
   </div>

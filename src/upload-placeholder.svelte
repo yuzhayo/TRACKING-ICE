@@ -3,6 +3,7 @@
   import CropInstructionPopup from './crop-instruction-popup.svelte'
   import { compressImage } from './lib/image'
   import { box, paint } from './lib/layout.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
   import { t, s } from './lib/text.svelte'
   import { IDENTITY, type CropTransform } from './lib/crop'
 
@@ -35,6 +36,9 @@
   let fileInput = $state<HTMLInputElement>()
   let busy = $state(false)
   let error = $state('')
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
   let instrOpen = $state(false)
 
   // A crop is "not cropped" when it is still the untouched original framing.
@@ -87,6 +91,9 @@
 </script>
 
 <section class="upload-placeholder" {hidden} aria-label="Upload placeholder" style={box(path) + paint(path)}>
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
   <input
     bind:this={fileInput}
     class="file-input"
@@ -110,7 +117,7 @@
 {#if expanded && !hidden}
   <div class="crop-overlay" role="dialog" aria-label="Potong foto">
     {#if photo}
-      <FrameCropper src={photo} initial={crop} {padColor} onOk={commitCrop} onCancel={() => onExpandedChange(false)} />
+      <FrameCropper path="crop" src={photo} initial={crop} {padColor} onOk={commitCrop} onCancel={() => onExpandedChange(false)} />
     {:else}
       <div class="crop-pick" style={s('crop.pick')}>
         <p>{error || t('crop.pickPrompt')}</p>
@@ -123,6 +130,13 @@
 <CropInstructionPopup open={instrOpen} onClose={() => instrOpen = false} />
 
 <style>
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .upload-placeholder {
     position: absolute;
     container-type: size;

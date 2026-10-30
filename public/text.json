@@ -1,70 +1,172 @@
 {
   "wheel": {
-    "row2": { "fontSize": "4cqi", "align": "center" },
-    "list": { "fontSize": "4cqi", "align": "center" },
+    "row2": {
+      "fontSize": "4cqi",
+      "align": "center"
+    },
+    "list": {
+      "fontSize": "4cqi",
+      "align": "center"
+    },
     "prompt": {
       "ba": "SELECT NAME",
       "outlet": "SELECT OUTLET"
+    },
+    "confirm": {
+      "fontSize": "4cqi",
+      "align": "center"
     }
   },
   "temp": {
-    "row": { "fontSize": "3.5cqi", "align": "center" },
-    "rowIndex": { "fontSize": "2.5cqi", "align": "center" }
+    "row": {
+      "fontSize": "3.5cqi",
+      "align": "center"
+    },
+    "rowIndex": {
+      "fontSize": "2.5cqi",
+      "align": "center"
+    },
+    "row5": {
+      "fontSize": "3.5cqi",
+      "align": "center"
+    }
   },
   "calendar": {
-    "fontSize": "min(5cqi, 30cqb)", "align": "center", "prompt": "PILIH TANGGAL",
+    "fontSize": "min(5cqi, 30cqb)",
+    "align": "center",
+    "prompt": "PILIH TANGGAL",
     "grid": {
-      "weekdays": ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"],
-      "title": { "fontSize": "min(5cqi, 5cqb)", "align": "center" },
-      "weekday": { "fontSize": "min(3.5cqi, 4cqb)", "align": "center" },
-      "day": { "fontSize": "min(4.5cqi, 5cqb)", "align": "center" }
+      "weekdays": [
+        "Sen",
+        "Sel",
+        "Rab",
+        "Kam",
+        "Jum",
+        "Sab",
+        "Min"
+      ],
+      "title": {
+        "fontSize": "min(5cqi, 5cqb)",
+        "align": "center"
+      },
+      "weekday": {
+        "fontSize": "min(3.5cqi, 4cqb)",
+        "align": "center"
+      },
+      "day": {
+        "fontSize": "min(4.5cqi, 5cqb)",
+        "align": "center"
+      }
     }
   },
   "nominal": {
-    "trigger": { "fontSize": "min(5cqi, 35cqb)", "align": "center", "prompt": "SELECT NOMINAL" },
-    "display": { "fontSize": "min(5cqi, 35cqb)", "align": "center", "prompt": "Masukkan nominal" }
-  },
-  "pad": {
-    "key": { "fontSize": "min(8cqi, 14cqb)", "align": "center" },
-    "clear": { "text": "C" },
-    "ok": { "text": "OK", "fontSize": "min(6cqi, 12cqb)", "align": "center" }
+    "trigger": {
+      "fontSize": "min(5cqi, 35cqb)",
+      "align": "center",
+      "prompt": "SELECT NOMINAL"
+    },
+    "display": {
+      "fontSize": "min(5cqi, 35cqb)",
+      "align": "center",
+      "prompt": "Masukkan nominal"
+    },
+    "pad": {
+      "key": {
+        "fontSize": "min(8cqi, 14cqb)",
+        "align": "center"
+      },
+      "clear": {
+        "text": "C",
+        "fontSize": "min(8cqi, 14cqb)",
+        "align": "center"
+      },
+      "ok": {
+        "text": "OK",
+        "fontSize": "min(6cqi, 12cqb)",
+        "align": "center"
+      }
+    }
   },
   "upload": {
-    "fontSize": "min(5cqi, 35cqb)", "align": "center",
+    "fontSize": "min(5cqi, 35cqb)",
+    "align": "center",
     "pick": "PILIH FOTO",
     "change": "UBAH CROP",
     "loading": "MEMUAT..."
   },
   "crop": {
-    "button": { "fontSize": "min(5cqi, 5cqb)", "align": "center" },
+    "button": {
+      "fontSize": "min(5cqi, 5cqb)",
+      "align": "center"
+    },
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "pick": { "fontSize": "min(5cqi, 5cqb)", "align": "center" },
+    "pick": {
+      "fontSize": "min(5cqi, 5cqb)",
+      "align": "center"
+    },
     "pickPrompt": "Pilih foto nota dari galeri.",
     "pickBtn": "Pilih Foto"
   },
   "action": {
-    "reset": { "fontSize": "8qi", "align": "center", "text": "RESET" },
-    "confirm": { "fontSize": "8cqi", "align": "center", "text": "CONFIRM" }
+    "reset": {
+      "fontSize": "8qi",
+      "align": "center",
+      "text": "RESET"
+    },
+    "confirm": {
+      "fontSize": "8cqi",
+      "align": "center",
+      "text": "CONFIRM"
+    }
   },
-  "btn": { "fontSize": "3.5cqi", "align": "center" },
-  "pil": { "fontSize": "4cqi", "align": "center" },
-  "jawaban": { "fontSize": "4cqi", "align": "center" },
+  "btn": {
+    "fontSize": "3.5cqi",
+    "align": "center"
+  },
+  "pil": {
+    "fontSize": "4cqi",
+    "align": "center"
+  },
+  "jawaban": {
+    "fontSize": "4cqi",
+    "align": "center"
+  },
   "popup": {
-    "title": { "fontSize": "min(5cqi, 5cqb)", "align": "center" },
-    "message": { "fontSize": "min(4cqi, 4cqb)", "align": "center" }
+    "title": {
+      "fontSize": "min(5cqi, 5cqb)",
+      "align": "center"
+    },
+    "message": {
+      "fontSize": "min(4cqi, 4cqb)",
+      "align": "center"
+    }
   },
   "result": {
-    "line": { "fontSize": "min(7cqi, 7cqb)", "align": "center" },
-    "detail": { "fontSize": "min(4cqi, 4cqb)", "align": "center" },
+    "line": {
+      "fontSize": "min(7cqi, 7cqb)",
+      "align": "center"
+    },
+    "detail": {
+      "fontSize": "min(4cqi, 4cqb)",
+      "align": "center"
+    },
     "sending": "SENDING...",
     "ok": "REPORT TERKIRIM",
     "fail": "REPORT BELUM TERKIRIM"
   },
   "warn": {
-    "nominal": { "fontSize": "min(6cqi, 6cqb)", "align": "center", "text": "NOMINAL TIDAK BOLEH LEBIH DARI {max}" }
+    "nominal": {
+      "fontSize": "min(6cqi, 6cqb)",
+      "align": "center",
+      "text": "NOMINAL TIDAK BOLEH LEBIH DARI {max}"
+    }
   },
   "instr": {
-    "crop": { "fontSize": "min(6cqi, 6cqb)", "align": "center", "text": "crop nota dengan jelas di dalam frame" }
+    "crop": {
+      "fontSize": "min(6cqi, 6cqb)",
+      "align": "center",
+      "text": "crop nota dengan jelas di dalam frame"
+    }
   }
 }

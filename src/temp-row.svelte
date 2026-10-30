@@ -2,6 +2,7 @@
   import './motion/animations.css'
   import { box, paint } from './lib/layout.svelte'
   import { s } from './lib/text.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
     path = '',
@@ -10,6 +11,9 @@
     revealed = false,
     onClick = () => {}
   } = $props()
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 
   function handleKeydown(event) {
     if (!revealed) return
@@ -32,6 +36,9 @@
   onclick={() => revealed && onClick()}
   onkeydown={handleKeydown}
 >
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
   <span class="edge edge-top" aria-hidden="true"></span>
   <span class="edge edge-right" aria-hidden="true"></span>
   <span class="edge edge-bottom" aria-hidden="true"></span>
@@ -46,6 +53,13 @@
     box-sizing: border-box;
     container-type: size;
     background: var(--fill);
+  }
+
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
   }
 
   .temp-row.editable {

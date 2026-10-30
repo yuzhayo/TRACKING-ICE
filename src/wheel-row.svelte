@@ -1,6 +1,7 @@
 <script>
   import './motion/animations.css'
   import { box, paint } from './lib/layout.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
     path = '',
@@ -15,6 +16,8 @@
   } = $props()
 
   const isCenter = $derived(variant === 'center')
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
 </script>
 
 <button
@@ -30,6 +33,9 @@
   style={box(path) + paint(path)}
   onclick={onClick}
 >
+  {#if ArtComp}
+    <div class="art-layer"><ArtComp {...artProps} /></div>
+  {/if}
   {#if text}
     <span class="wheel-row-text" style={textStyle} key={bumpKey}>{text}</span>
   {/if}
@@ -64,6 +70,13 @@
     opacity: 0;
     transform: translate3d(0, -100%, 0);
     pointer-events: none;
+  }
+
+  .art-layer {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
   }
 
   .wheel-row-text {
