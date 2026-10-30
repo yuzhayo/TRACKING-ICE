@@ -1,7 +1,8 @@
 <script lang="ts">
   import PopupPlaceholder from './popup-placeholder.svelte'
   import DateGrid from './date-grid.svelte'
-  import { box } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
+  import { t, s } from './lib/text.svelte'
 
   let {
     path = '',
@@ -21,16 +22,17 @@
   const dateFormat = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
   const displayDate = $derived(value
     ? dateFormat.format(new Date(Number(value.slice(0, 4)), Number(value.slice(5, 7)) - 1, Number(value.slice(8, 10))))
-    : 'Pilih tanggal nota')
+    : t('calendar.prompt'))
 </script>
 
-<section class="calendar-placeholder" {hidden} aria-label="Calendar placeholder" style={box(path)}>
+<section class="calendar-placeholder" {hidden} aria-label="Calendar placeholder" style={box(path) + paint(path)}>
   <button
     class="calendar-trigger"
     type="button"
     aria-label="Pilih tanggal nota"
     aria-haspopup="dialog"
     aria-expanded={expanded}
+    style={s('calendar')}
     onclick={() => onExpandedChange(true)}
   >{displayDate}</button>
 
@@ -52,11 +54,10 @@
     height: 100%;
     border: 0;
     padding: 0% 3%;
-    background: #142736;
+    background: var(--fill);
     color: #e2e8f0;
-    box-shadow: inset 0 0 0 0.35cqi #67e8f9;
+    box-shadow: inset 0 0 0 0.35cqi var(--line);
     font: inherit;
-    font-size: min(5cqi, 35cqb);
     cursor: pointer;
   }
 

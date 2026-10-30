@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { t as txt, s } from './lib/text.svelte'
   import {
     IDENTITY,
     ZOOM_MIN,
@@ -159,8 +160,8 @@
   </div>
 
   <div class="crop-actions">
-    <button type="button" class="crop-cancel" onclick={onCancel}>Cancel</button>
-    <button type="button" class="crop-ok" onclick={() => onOk(quantize(t))}>Confirm</button>
+    <button type="button" class="crop-cancel" style={s('crop.button')} onclick={onCancel}>{txt('crop.cancel')}</button>
+    <button type="button" class="crop-ok" style={s('crop.button')} onclick={() => onOk(quantize(t))}>{txt('crop.confirm')}</button>
   </div>
 </div>
 
@@ -223,7 +224,6 @@
     border: 0;
     padding: 3% 0;
     font: inherit;
-    font-size: min(5cqi, 5cqb);
     cursor: pointer;
     background: #243047;
     color: #e2e8f0;

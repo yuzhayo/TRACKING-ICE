@@ -1,0 +1,5 @@
+{
+  "mainscreen": { "render": "image", "src": "/bg.jpg", "fit": "stretch", "scale": 100 },
+  "action.reset": { "render": "btn" },
+  "action.confirm": { "render": "btn" }
+}

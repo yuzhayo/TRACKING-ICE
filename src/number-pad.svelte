@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { t, s } from './lib/text.svelte'
+
   let {
     onDigit = () => {},
     onDelete = () => {},
@@ -44,22 +46,23 @@
 
 <section class="number-pad" aria-label="Papan angka">
   {#each digits as digit (digit)}
-    <button type="button" onclick={() => onDigit(digit)}>{digit}</button>
+    <button type="button" style={s('pad.key')} onclick={() => onDigit(digit)}>{digit}</button>
   {/each}
 
   <button
     type="button"
     class="pad-fn"
     aria-label="Ketuk untuk hapus satu angka, tahan untuk hapus semua"
+    style={s('pad.key')}
     onpointerdown={(event) => { event.preventDefault(); startHold() }}
     onpointerup={endHold}
     onpointerleave={cancelHold}
     onpointercancel={cancelHold}
-  >C</button>
+  >{t('pad.clear')}</button>
 
-  <button type="button" onclick={() => onDigit('0')}>0</button>
+  <button type="button" style={s('pad.key')} onclick={() => onDigit('0')}>0</button>
 
-  <button type="button" class="pad-ok" disabled={confirmDisabled} onclick={onConfirm}>OK</button>
+  <button type="button" class="pad-ok" style={s('pad.ok')} disabled={confirmDisabled} onclick={onConfirm}>{t('pad.ok')}</button>
 </section>
 
 <style>
@@ -81,7 +84,6 @@
     color: #e2e8f0;
     box-shadow: inset 0 0 0 0.25cqi #4c9981;
     font: inherit;
-    font-size: min(8cqi, 14cqb);
     cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
@@ -95,7 +97,6 @@
   button.pad-ok {
     background: #142736;
     box-shadow: inset 0 0 0 0.25cqi #67e8f9;
-    font-size: min(6cqi, 12cqb);
   }
 
   button:active {

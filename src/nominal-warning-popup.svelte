@@ -1,5 +1,6 @@
 <script lang="ts">
   import PopupPlaceholder from './popup-placeholder.svelte'
+  import { t, s } from './lib/text.svelte'
 
   let {
     open = false,
@@ -12,11 +13,12 @@
   } = $props()
 
   const fmt = new Intl.NumberFormat('id-ID')
+  const label = $derived(t('warn.nominal').replaceAll('{max}', fmt.format(max)))
 </script>
 
 <PopupPlaceholder {open} {onClose}>
   <div class="warn-body">
-    <p class="warn-line">NOMINAL TIDAK BOLEH LEBIH DARI {fmt.format(max)}</p>
+    <p class="warn-line" style={s('warn.nominal')}>{label}</p>
   </div>
 </PopupPlaceholder>
 
@@ -32,7 +34,6 @@
 
   .warn-line {
     margin: 0;
-    font-size: min(6cqi, 6cqb);
     font-weight: 800;
     color: #fbbf24;
   }

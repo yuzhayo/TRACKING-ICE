@@ -1,6 +1,6 @@
 <script>
   import TempRow from './temp-row.svelte'
-  import { box } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
 
   let {
     path = '',
@@ -17,7 +17,7 @@
   class="temp-placeholder"
   class:hidden={hidden}
   aria-label="Temp placeholder"
-  style={box(path)}
+  style={box(path) + paint(path)}
 >
   <TempRow path={`${path}.row1`} label="1" text={answers[0]} revealed={!!answers[0]} onClick={() => onSelect(1)} />
   <TempRow path={`${path}.row2`} label="2" text={answers[1]} revealed={!!answers[1]} onClick={() => onSelect(2)} />
@@ -42,15 +42,14 @@
 
 <style>
   .temp-placeholder {
-    --temp-edge-color: rgba(248, 113, 133, 0.55);
     position: absolute;
     box-sizing: border-box;
     pointer-events: none;
     background-image:
-      linear-gradient(var(--temp-edge-color), var(--temp-edge-color)),
-      linear-gradient(var(--temp-edge-color), var(--temp-edge-color)),
-      linear-gradient(var(--temp-edge-color), var(--temp-edge-color)),
-      linear-gradient(var(--temp-edge-color), var(--temp-edge-color));
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line));
     background-size: 100% 0.6%, 0.6% 100%, 100% 0.6%, 0.6% 100%;
     background-position: 0% 0%, 100% 0%, 0% 100%, 0% 0%;
     background-repeat: no-repeat;

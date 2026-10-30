@@ -2,7 +2,8 @@
   import FrameCropper from './frame-cropper.svelte'
   import CropInstructionPopup from './crop-instruction-popup.svelte'
   import { compressImage } from './lib/image'
-  import { box } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
+  import { t, s } from './lib/text.svelte'
   import { IDENTITY, type CropTransform } from './lib/crop'
 
   let {
@@ -85,7 +86,7 @@
   }
 </script>
 
-<section class="upload-placeholder" {hidden} aria-label="Upload placeholder" style={box(path)}>
+<section class="upload-placeholder" {hidden} aria-label="Upload placeholder" style={box(path) + paint(path)}>
   <input
     bind:this={fileInput}
     class="file-input"
@@ -99,9 +100,10 @@
       class="upload-trigger"
       type="button"
       aria-label="Pilih foto"
+      style={s('upload')}
       disabled={busy}
       onclick={triggerClick}
-    >{busy ? 'MEMUAT...' : (photo ? 'UBAH CROP' : 'PILIH FOTO')}</button>
+    >{busy ? t('upload.loading') : (photo ? t('upload.change') : t('upload.pick'))}</button>
   {/if}
 </section>
 
@@ -110,9 +112,9 @@
     {#if photo}
       <FrameCropper src={photo} initial={crop} {padColor} onOk={commitCrop} onCancel={() => onExpandedChange(false)} />
     {:else}
-      <div class="crop-pick">
-        <p>{error || 'Pilih foto nota dari galeri.'}</p>
-        <button type="button" onclick={openPicker}>Pilih Foto</button>
+      <div class="crop-pick" style={s('crop.pick')}>
+        <p>{error || t('crop.pickPrompt')}</p>
+        <button type="button" onclick={openPicker}>{t('crop.pickBtn')}</button>
       </div>
     {/if}
   </div>
@@ -135,11 +137,10 @@
     height: 100%;
     border: 0;
     padding: 0% 3%;
-    background: #2a1c10;
+    background: var(--fill);
     color: #e2e8f0;
-    box-shadow: inset 0 0 0 0.35cqi #fb923c;
+    box-shadow: inset 0 0 0 0.35cqi var(--line);
     font: inherit;
-    font-size: min(5cqi, 35cqb);
     cursor: pointer;
   }
 
@@ -170,7 +171,6 @@
     gap: 5cqh;
     text-align: center;
     color: #cbd5e1;
-    font-size: min(5cqi, 5cqb);
   }
 
   .crop-pick p {

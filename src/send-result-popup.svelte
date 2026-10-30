@@ -1,5 +1,6 @@
 <script lang="ts">
   import PopupPlaceholder from './popup-placeholder.svelte'
+  import { t, s } from './lib/text.svelte'
 
   let {
     open = false,
@@ -17,10 +18,10 @@
 <PopupPlaceholder {open} dismissible={state !== 'sending'} {onClose}>
   <div class="result-body" class:ok={state === 'ok'} class:sending={state === 'sending'}>
     {#if state === 'sending'}
-      <p class="result-line">SENDING...</p>
+      <p class="result-line" style={s('result.line')}>{t('result.sending')}</p>
     {:else}
-      <p class="result-line">{state === 'ok' ? 'REPORT TERKIRIM' : 'REPORT BELUM TERKIRIM'}</p>
-      <p class="result-detail">{message}</p>
+      <p class="result-line" style={s('result.line')}>{state === 'ok' ? t('result.ok') : t('result.fail')}</p>
+      <p class="result-detail" style={s('result.detail')}>{message}</p>
     {/if}
   </div>
 </PopupPlaceholder>
@@ -39,7 +40,6 @@
 
   .result-line {
     margin: 0;
-    font-size: min(7cqi, 7cqb);
     font-weight: 800;
     color: #f87171;
   }
@@ -54,7 +54,6 @@
 
   .result-detail {
     margin: 0;
-    font-size: min(4cqi, 4cqb);
     color: #cbd5e1;
     word-break: break-word;
   }

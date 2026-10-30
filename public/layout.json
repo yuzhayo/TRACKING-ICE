@@ -1,16 +1,27 @@
 {
+  "mainscreen": {
+    "top": 0,
+    "left": 0,
+    "width": 100,
+    "height": 100,
+    "z": 0,
+    "outline": { "on": false, "color": "#000000", "opacity": 0 },
+    "placeholder": { "on": false, "color": "#000000", "opacity": 0 }
+  },
   "temp": {
     "top": 0,
     "left": 0,
     "width": 100,
     "height": 76,
     "z": 0,
+    "outline": { "on": true, "color": "#f87171", "opacity": 55 },
+    "placeholder": { "on": false, "color": "#000000", "opacity": 0 },
     "children": {
-      "row1": { "top": 2, "left": 3, "width": 94, "height": 11, "z": 1 },
-      "row2": { "top": 15, "left": 3, "width": 94, "height": 11, "z": 1 },
-      "row3": { "top": 28, "left": 3, "width": 94, "height": 11, "z": 1 },
-      "row4": { "top": 41, "left": 3, "width": 94, "height": 11, "z": 1 },
-      "row5": { "top": 54, "left": 3, "width": 94, "height": 42, "z": 1 }
+      "row1": { "top": 2, "left": 3, "width": 94, "height": 11, "z": 1, "outline": { "on": true, "color": "#f87171", "opacity": 85 }, "placeholder": { "on": true, "color": "#0f172a", "opacity": 35 } },
+      "row2": { "top": 15, "left": 3, "width": 94, "height": 11, "z": 1, "outline": { "on": true, "color": "#f87171", "opacity": 85 }, "placeholder": { "on": true, "color": "#0f172a", "opacity": 35 } },
+      "row3": { "top": 28, "left": 3, "width": 94, "height": 11, "z": 1, "outline": { "on": true, "color": "#f87171", "opacity": 85 }, "placeholder": { "on": true, "color": "#0f172a", "opacity": 35 } },
+      "row4": { "top": 41, "left": 3, "width": 94, "height": 11, "z": 1, "outline": { "on": true, "color": "#f87171", "opacity": 85 }, "placeholder": { "on": true, "color": "#0f172a", "opacity": 35 } },
+      "row5": { "top": 54, "left": 3, "width": 94, "height": 42, "z": 1, "outline": { "on": true, "color": "#f87171", "opacity": 85 }, "placeholder": { "on": true, "color": "#0f172a", "opacity": 35 } }
     }
   },
   "wheel": {
@@ -19,25 +30,54 @@
     "width": 100,
     "height": 40,
     "z": 1,
+    "outline": { "on": true, "color": "#f472b6", "opacity": 55 },
+    "placeholder": { "on": false, "color": "#000000", "opacity": 0 },
     "children": {
-      "row1": { "top": 0, "left": 0, "width": 100, "height": 40, "z": 1 },
-      "list": { "top": 0, "left": 0, "width": 100, "height": 100, "z": 2 },
-      "row2": { "top": 40, "left": 0, "width": 100, "height": 20, "z": 3 },
-      "row3": { "top": 60, "left": 0, "width": 100, "height": 40, "z": 1 }
+      "row1": { "top": 0, "left": 0, "width": 100, "height": 40, "z": 1, "outline": { "on": true, "color": "#38bdf8", "opacity": 55 }, "placeholder": { "on": true, "color": "#38bdf8", "opacity": 10 } },
+      "row2": { "top": 40, "left": 0, "width": 100, "height": 20, "z": 2, "outline": { "on": true, "color": "#38bdf8", "opacity": 55 }, "placeholder": { "on": true, "color": "#a78bfa", "opacity": 12 } },
+      "list": { "top": 0, "left": 0, "width": 100, "height": 100, "z": 3, "outline": { "on": false, "color": "#000000", "opacity": 0 }, "placeholder": { "on": false, "color": "#000000", "opacity": 0 } },
+      "confirm": { "top": 40, "left": 30, "width": 40, "height": 20, "z": 4, "outline": { "on": true, "color": "#e2e8f0", "opacity": 0 }, "placeholder": { "on": false, "color": "#000000", "opacity": 0 } },
+      "row3": { "top": 60, "left": 0, "width": 100, "height": 40, "z": 1, "outline": { "on": true, "color": "#38bdf8", "opacity": 55 }, "placeholder": { "on": true, "color": "#34d399", "opacity": 10 } }
     }
   },
-  "calendar": { "top": 54, "left": 0, "width": 100, "height": 8, "z": 2 },
-  "nominal": { "top": 54, "left": 0, "width": 100, "height": 8, "z": 2 },
-  "upload": { "top": 54, "left": 0, "width": 100, "height": 8, "z": 2 },
-  "action": {
-    "top": 78,
+  "calendar": {
+    "top": 54,
     "left": 0,
     "width": 100,
-    "height": 19,
+    "height": 8,
+    "z": 2,
+    "outline": { "on": true, "color": "#67e8f9", "opacity": 100 },
+    "placeholder": { "on": true, "color": "#142736", "opacity": 100 }
+  },
+  "nominal": {
+    "top": 54,
+    "left": 0,
+    "width": 100,
+    "height": 8,
+    "z": 2,
+    "outline": { "on": true, "color": "#6ee7b7", "opacity": 100 },
+    "placeholder": { "on": true, "color": "#152d26", "opacity": 100 }
+  },
+  "upload": {
+    "top": 54,
+    "left": 0,
+    "width": 100,
+    "height": 8,
+    "z": 2,
+    "outline": { "on": true, "color": "#fb923c", "opacity": 100 },
+    "placeholder": { "on": true, "color": "#2a1c10", "opacity": 100 }
+  },
+  "action": {
+    "top": 85,
+    "left": 0,
+    "width": 100,
+    "height": 13,
     "z": 1,
+    "outline": { "on": true, "color": "#fbbf24", "opacity": 0 },
+    "placeholder": { "on": false, "color": "#000000", "opacity": 0 },
     "children": {
-      "reset": { "top": 30, "left": 6.6667, "width": 40, "height": 35, "z": 1 },
-      "confirm": { "top": 30, "left": 53.3333, "width": 40, "height": 35, "z": 1 }
+      "reset": { "top": 30, "left": 6.6667, "width": 40, "height": 35, "z": 1, "outline": { "on": true, "color": "#38bdf8", "opacity": 85 }, "placeholder": { "on": true, "color": "#0f172a", "opacity": 35 } },
+      "confirm": { "top": 30, "left": 53.3333, "width": 40, "height": 35, "z": 1, "outline": { "on": true, "color": "#fb923c", "opacity": 85 }, "placeholder": { "on": true, "color": "#0f172a", "opacity": 35 } }
     }
   }
 }

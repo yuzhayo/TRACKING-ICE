@@ -1,10 +1,12 @@
 <script lang="ts">
+  import { list, s } from './lib/text.svelte'
+
   let { value = '', onSelect }: {
     value?: string
     onSelect: (date: string) => void
   } = $props()
 
-  const weekdays = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min']
+  const weekdays = list('calendar.grid.weekdays')
   const monthFormat = new Intl.DateTimeFormat('id-ID', { month: 'long', year: 'numeric' })
   const dayFormat = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
   const today = new Date()
@@ -36,19 +38,20 @@
 <section class="date-grid" aria-label="Pilih tanggal nota">
   <div class="month-navigation">
     <button type="button" aria-label="Bulan sebelumnya" onclick={() => moveMonth(-1)}>&lt;</button>
-    <h3 aria-live="polite">{monthFormat.format(month)}</h3>
+    <h3 aria-live="polite" style={s('calendar.grid.title')}>{monthFormat.format(month)}</h3>
     <button type="button" aria-label="Bulan berikutnya" disabled={nextMonth > today} onclick={() => moveMonth(1)}>&gt;</button>
   </div>
 
   <div class="days">
     {#each weekdays as weekday}
-      <span class="weekday" aria-hidden="true">{weekday}</span>
+      <span class="weekday" style={s('calendar.grid.weekday')} aria-hidden="true">{weekday}</span>
     {/each}
     {#each days as day}
       {#if day}
         <button
           type="button"
           class:selected={dateKey(day) === value}
+          style={s('calendar.grid.day')}
           aria-label={dayFormat.format(day)}
           aria-pressed={dateKey(day) === value}
           aria-current={dateKey(day) === dateKey(today) ? 'date' : undefined}
@@ -80,7 +83,6 @@
   h3 {
     margin: 0;
     text-align: center;
-    font-size: min(5cqi, 5cqb);
     font-weight: 600;
   }
 
@@ -95,7 +97,6 @@
   .weekday {
     display: grid;
     place-items: center;
-    font-size: min(3.5cqi, 4cqb);
     color: #94a3b8;
   }
 
@@ -106,7 +107,6 @@
     background: #172a39;
     color: #e2e8f0;
     font: inherit;
-    font-size: min(4.5cqi, 5cqb);
     box-shadow: inset 0 0 0 0.15cqi #3d6680;
     cursor: pointer;
     touch-action: manipulation;

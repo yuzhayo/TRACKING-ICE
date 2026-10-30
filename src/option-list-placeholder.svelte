@@ -1,6 +1,7 @@
 <script>
   import './motion/animations.css'
   import { box } from './lib/layout.svelte'
+  import { s } from './lib/text.svelte'
 
   let {
     path = '',
@@ -45,6 +46,20 @@
     prevOpen = open
   })
 
+  // The band is sized in %, so whenever the list box changes size (viewport,
+  // rotation, keyboard) recompute the row px and re-snap, or rows drift under
+  // the band and overlap.
+  $effect(() => {
+    const el = listEl
+    if (!el) return
+    const ro = new ResizeObserver(() => {
+      measure()
+      scrollToIndex(activeIndex)
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  })
+
   function handleScroll() {
     if (!listEl || programmatic) return
     const h = rowHeight()
@@ -78,7 +93,7 @@
   onanimationend={handleAnimationEnd}
 >
   {#each options as option, i (option)}
-    <div class="option-item" class:active={open && i === activeIndex} style="opacity: {itemOpacity(i)}" role="option" aria-selected={i === activeIndex}>{option}</div>
+    <div class="option-item" class:active={open && i === activeIndex} style="opacity: {itemOpacity(i)}; {s(path)}" role="option" aria-selected={i === activeIndex}>{option}</div>
   {/each}
 </div>
 
@@ -111,7 +126,6 @@
     align-items: center;
     justify-content: center;
     padding-inline: 3%;
-    font-size: 4cqi;
     font-weight: 700;
     line-height: 1;
     color: #e2e8f0;

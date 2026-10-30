@@ -1,6 +1,7 @@
 <script>
   import './motion/animations.css'
-  import { box } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
+  import { s } from './lib/text.svelte'
 
   let {
     path = '',
@@ -27,7 +28,7 @@
   tabindex={revealed ? 0 : -1}
   aria-disabled={!revealed}
   aria-label={`Ubah jawaban ${label}`}
-  style={box(path)}
+  style={box(path) + paint(path)}
   onclick={() => revealed && onClick()}
   onkeydown={handleKeydown}
 >
@@ -35,8 +36,8 @@
   <span class="edge edge-right" aria-hidden="true"></span>
   <span class="edge edge-bottom" aria-hidden="true"></span>
   <span class="edge edge-left" aria-hidden="true"></span>
-  <span class="temp-row-index" aria-hidden="true">{label}</span>
-  <span class="temp-row-text">{text}</span>
+  <span class="temp-row-index" style={s('temp.rowIndex')} aria-hidden="true">{label}</span>
+  <span class="temp-row-text" style={s('temp.row')}>{text}</span>
 </div>
 
 <style>
@@ -44,7 +45,7 @@
     position: absolute;
     box-sizing: border-box;
     container-type: size;
-    background: rgba(15, 23, 42, 0.35);
+    background: var(--fill);
   }
 
   .temp-row.editable {
@@ -60,7 +61,7 @@
   .edge {
     position: absolute;
     z-index: 1;
-    background: rgba(248, 113, 133, 0.85);
+    background: var(--line);
     pointer-events: none;
   }
 
@@ -98,7 +99,6 @@
     left: 0%;
     z-index: 2;
     padding: 0 1.5cqi;
-    font-size: 2.5cqi;
     font-weight: 700;
     line-height: 1;
     color: rgba(254, 202, 202, 0.5);
@@ -113,7 +113,6 @@
     align-items: center;
     justify-content: center;
     padding-inline: 3%;
-    font-size: 3.5cqi;
     font-weight: 700;
     line-height: 1;
     color: #fecaca;

@@ -1,12 +1,13 @@
 <script>
   import './motion/animations.css'
-  import { box } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
 
   let {
     path = '',
     variant = 'center',
     label = 'Wheel row',
     text = '',
+    textStyle = '',
     open = true,
     closing = false,
     bumpKey = '',
@@ -26,43 +27,31 @@
   type="button"
   aria-label={label}
   disabled={!isCenter && !open}
-  style={box(path)}
+  style={box(path) + paint(path)}
   onclick={onClick}
 >
   {#if text}
-    <span class="wheel-row-text" key={bumpKey}>{text}</span>
+    <span class="wheel-row-text" style={textStyle} key={bumpKey}>{text}</span>
   {/if}
 </button>
 
 <style>
   .wheel-row {
-    --row-edge-color: rgba(56, 189, 248, 0.55);
     position: absolute;
     margin: 0;
     padding: 0;
     border: none;
+    background-color: var(--fill);
     background-image:
-      linear-gradient(var(--row-edge-color), var(--row-edge-color)),
-      linear-gradient(var(--row-edge-color), var(--row-edge-color)),
-      linear-gradient(var(--row-edge-color), var(--row-edge-color)),
-      linear-gradient(var(--row-edge-color), var(--row-edge-color));
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line));
     background-size: 100% 1%, 1% 100%, 100% 1%, 1% 100%;
     background-position: 0% 0%, 100% 0%, 0% 100%, 0% 0%;
     background-repeat: no-repeat;
     -webkit-tap-highlight-color: transparent;
     cursor: pointer;
-  }
-
-  .variant-top {
-    background-color: rgba(56, 189, 248, 0.10);
-  }
-
-  .variant-bottom {
-    background-color: rgba(52, 211, 153, 0.10);
-  }
-
-  .variant-center {
-    background-color: rgba(167, 139, 250, 0.12);
   }
 
   .variant-top.closed {
@@ -85,7 +74,6 @@
     align-items: center;
     justify-content: center;
     padding-inline: 3%;
-    font-size: 4cqi;
     font-weight: 700;
     line-height: 1;
     color: #e2e8f0;

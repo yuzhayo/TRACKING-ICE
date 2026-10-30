@@ -2,7 +2,7 @@
   import ResetButton from './reset-button.svelte'
   import ConfirmButton from './confirm-button.svelte'
   import './motion/animations.css'
-  import { box } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
 
   let {
     path = '',
@@ -32,7 +32,7 @@
   class:out={out}
   class:in={enter}
   aria-label="Action button area"
-  style={box(path)}
+  style={box(path) + paint(path)}
   onanimationend={handleAnimationEnd}
 >
   <span class="edge edge-top" aria-hidden="true"></span>
@@ -66,7 +66,7 @@
   .edge {
     position: absolute;
     z-index: 1;
-    background: rgba(251, 191, 36, 0.75);
+    background: var(--line);
     pointer-events: none;
   }
 

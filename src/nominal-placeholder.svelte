@@ -1,7 +1,8 @@
 <script lang="ts">
   import NumberPadPlaceholder from './number-pad-placeholder.svelte'
   import NominalWarningPopup from './nominal-warning-popup.svelte'
-  import { box } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
+  import { t, s } from './lib/text.svelte'
 
   let {
     path = '',
@@ -35,8 +36,8 @@
   })
 
   const group = (d: string) => d.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-  const collapsedLabel = $derived(value ? `Rp ${group(value)}` : 'SELECT NOMINAL')
-  const displayAmount = $derived(draft ? `Rp ${group(draft)}` : 'Masukkan nominal')
+  const collapsedLabel = $derived(value ? `Rp ${group(value)}` : t('nominal.trigger.prompt'))
+  const displayAmount = $derived(draft ? `Rp ${group(draft)}` : t('nominal.display.prompt'))
 
   // Fire the warning once, on the step that pushes the value past the limit.
   function checkOver() {
@@ -72,13 +73,13 @@
   }
 </script>
 
-<section class="nominal-placeholder" {hidden} aria-label="Nominal placeholder" style={box(path)}>
+<section class="nominal-placeholder" {hidden} aria-label="Nominal placeholder" style={box(path) + paint(path)}>
   {#if expanded}
-    <output class="nominal-display" class:invalid={overLimit} aria-label="Nominal nota" aria-live="polite">{displayAmount}</output>
+    <output class="nominal-display" class:invalid={overLimit} aria-label="Nominal nota" aria-live="polite" style={s('nominal.display')}>{displayAmount}</output>
     <NumberPadPlaceholder onDigit={appendDigit} onDelete={deleteOne} onClear={clearAll} onConfirm={confirm} confirmDisabled={overLimit} />
     <NominalWarningPopup open={warnOpen} {max} onClose={() => warnOpen = false} />
   {:else}
-    <button class="nominal-trigger" type="button" aria-label="Nominal nota" onclick={() => onExpandedChange(true)}>{collapsedLabel}</button>
+    <button class="nominal-trigger" type="button" aria-label="Nominal nota" style={s('nominal.trigger')} onclick={() => onExpandedChange(true)}>{collapsedLabel}</button>
   {/if}
 </section>
 
@@ -93,11 +94,10 @@
     inset: 0%;
     border: 0;
     padding: 0 3%;
-    background: #152d26;
+    background: var(--fill);
     color: #e2e8f0;
-    box-shadow: inset 0 0 0 0.35cqi #6ee7b7;
+    box-shadow: inset 0 0 0 0.35cqi var(--line);
     font: inherit;
-    font-size: min(5cqi, 35cqb);
     cursor: pointer;
   }
 
@@ -107,10 +107,9 @@
     display: grid;
     place-items: center;
     padding-inline: 3%;
-    background: #152d26;
+    background: var(--fill);
     color: #e2e8f0;
-    box-shadow: inset 0 0 0 0.35cqi #6ee7b7;
-    font-size: min(5cqi, 35cqb);
+    box-shadow: inset 0 0 0 0.35cqi var(--line);
   }
 
   .nominal-display.invalid {

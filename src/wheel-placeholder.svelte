@@ -1,7 +1,9 @@
 <script>
   import WheelRow from './wheel-row.svelte'
   import OptionListPlaceholder from './option-list-placeholder.svelte'
-  import { box } from './lib/layout.svelte'
+  import ConfirmArea from './confirm-area.svelte'
+  import { box, paint } from './lib/layout.svelte'
+  import { s } from './lib/text.svelte'
 
   let {
     path = '',
@@ -36,7 +38,7 @@
   class="wheel-placeholder"
   class:hidden={hidden}
   aria-label="Wheel placeholder"
-  style={box(path)}
+  style={box(path) + paint(path)}
 >
   <WheelRow
     path={`${path}.row1`}
@@ -53,10 +55,13 @@
     variant="center"
     label="Wheel row 2"
     text={centerText}
+    textStyle={s(`${path}.row2`)}
     bumpKey={centerText}
     open={true}
     onClick={handleCenterClick}
   />
+
+  <ConfirmArea path={`${path}.confirm`} onClick={handleCenterClick} />
 
   <WheelRow
     path={`${path}.row3`}
@@ -71,10 +76,10 @@
   .wheel-placeholder {
     position: absolute;
     background-image:
-      linear-gradient(rgba(244, 114, 182, 0.55), rgba(244, 114, 182, 0.55)),
-      linear-gradient(rgba(244, 114, 182, 0.55), rgba(244, 114, 182, 0.55)),
-      linear-gradient(rgba(244, 114, 182, 0.55), rgba(244, 114, 182, 0.55)),
-      linear-gradient(rgba(244, 114, 182, 0.55), rgba(244, 114, 182, 0.55));
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line));
     background-size: 100% 0.6%, 0.6% 100%, 100% 0.6%, 0.6% 100%;
     background-position: 0% 0%, 100% 0%, 0% 100%, 0% 100%;
     background-repeat: no-repeat;

@@ -1,5 +1,6 @@
 <script lang="ts">
   import PopupPlaceholder from './popup-placeholder.svelte'
+  import { t, s } from './lib/text.svelte'
 
   let {
     open = false,
@@ -12,7 +13,7 @@
 
 <PopupPlaceholder {open} {onClose}>
   <div class="instr-body">
-    <p class="instr-line">crop nota dengan jelas di dalam frame</p>
+    <p class="instr-line" style={s('instr.crop')}>{t('instr.crop')}</p>
   </div>
 </PopupPlaceholder>
 
@@ -28,7 +29,6 @@
 
   .instr-line {
     margin: 0;
-    font-size: min(6cqi, 6cqb);
     font-weight: 800;
     color: #fb923c;
   }

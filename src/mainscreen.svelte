@@ -8,10 +8,15 @@
   import SendResultPopup from './send-result-popup.svelte'
   import { cropDataUrl, loadImg } from './lib/crop'
   import { loadConfig, readOptionsCache, fetchOptions, submitAnswer } from './lib/api'
-  import { loadLayout } from './lib/layout.svelte'
+  import { loadLayout, box, paint } from './lib/layout.svelte'
+  import { loadText, t } from './lib/text.svelte'
+  import { loadContent, renderFor, propsFor } from './lib/content.svelte'
 
-  // Geometry comes from public/layout.json - nothing here hardcodes a position.
+  // Geometry comes from public/layout.json, copy from public/text.json,
+  // and what renders per placeholder from public/content.json.
   loadLayout()
+  loadText()
+  loadContent()
 
   let currentQuestion = $state(1)
   let answers = $state(['', '', '', '', ''])
@@ -110,11 +115,16 @@
 
   const dateFmt = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
 
-  const wheelPrompts = { 1: 'SELECT BA NAME', 2: 'SELECT OUTLET' }
   // Q1 = the BA list; Q2 = the outlets of the BA chosen in Q1.
   const currentWheelOptions = $derived(
     currentQuestion === 1 ? baList : (outletsByBa[answers[0]] || [])
   )
+  const wheelPrompt = $derived(currentQuestion === 1 ? t('wheel.prompt.ba') : t('wheel.prompt.outlet'))
+
+  // mainscreen is itself a placeholder: content.json decides what enters it
+  // (the background image), and it still holds its child placeholders.
+  const BgComp = $derived(renderFor('mainscreen'))
+  const bgProps = $derived(propsFor('mainscreen'))
 
   let expanded = $state(false)
   let actionHidden = $state(false)
@@ -283,7 +293,10 @@
   }
 </script>
 
-<section class="mainscreen">
+<section class="mainscreen" style={box('mainscreen') + paint('mainscreen')}>
+  {#if BgComp}
+    <BgComp {...bgProps} />
+  {/if}
   <TempPlaceholder
     path="temp"
     {answers}
@@ -302,7 +315,7 @@
     hidden={!showWheel}
     open={expanded}
     options={currentWheelOptions}
-    prompt={wheelPrompts[currentQuestion]}
+    prompt={wheelPrompt}
     selected={answers[currentQuestion - 1]}
     onCenterClick={expand}
     onConfirm={answerWheel}
@@ -326,9 +339,6 @@
 <style>
   .mainscreen {
     position: absolute;
-    inset: 0%;
-    width: 100%;
-    height: 100%;
-    background: #0d1420;
+    background: var(--fill);
   }
 </style>
