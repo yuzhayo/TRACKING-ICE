@@ -247,5 +247,11 @@
     "base": "/key_base.png",
     "press": "/key_press.png",
     "off": "/key_off.png"
+  },
+  "info": {
+    "render": "info",
+    "src": "/utx_ic_information.png",
+    "circle": "/utx_btn_common_circle_02.png",
+    "effectSrc": "/utx_btn_common_circle_02_effect.png"
   }
 }

@@ -1,7 +1,6 @@
 <script>
   import { onMount } from 'svelte';
   import Mainscreen from './mainscreen.svelte';
-  import SettingsGear from './settings-gear.svelte';
 
   let pullY = $state(0);
   let refreshing = $state(false);
@@ -60,7 +59,6 @@
           await Promise.all(regs.map((r) => r.unregister()));
         }
       } catch {
-        // no action; reload anyway
       } finally {
         refreshing = false;
         location.reload();
@@ -89,7 +87,6 @@
 
 <main class="app">
   <Mainscreen />
-  <SettingsGear />
 </main>
 
 <style>

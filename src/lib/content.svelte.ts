@@ -18,6 +18,7 @@ import Btn from '../component/Btn.svelte'
 import Image from '../component/Image.svelte'
 import Pil from '../component/Pil.svelte'
 import PadKey from '../component/PadKey.svelte'
+import Info from '../component/Info.svelte'
 
 /* The registry only makes a component REACHABLE by key. Which placeholder
    renders which key is public/content.json's decision. */
@@ -25,7 +26,8 @@ const registry: Record<string, unknown> = {
   btn: Btn,
   image: Image,
   pil: Pil,
-  pad_key: PadKey
+  pad_key: PadKey,
+  info: Info
 }
 
 type ContentNode = { render?: string; [prop: string]: unknown }
