@@ -63,7 +63,6 @@
     label="Wheel row 2"
     text={centerText}
     textStyle={s(`${path}.row2`)}
-    bumpKey={centerText}
     open={true}
     onClick={handleCenterClick}
   />

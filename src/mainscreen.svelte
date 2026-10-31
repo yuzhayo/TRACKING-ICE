@@ -263,7 +263,7 @@
     try {
       const res = await submitAnswer(cfg, buildPayload())
       resultState = 'ok'
-      resultMsg = res.fileName ? `Nomor: ${res.fileName}` : 'Laporan berhasil dikirim.'
+      resultMsg = 'Laporan berhasil dikirim.'
       clearFields()
     } catch (err) {
       resultState = 'fail'

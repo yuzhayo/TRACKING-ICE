@@ -11,7 +11,6 @@
     textStyle = '',
     open = true,
     closing = false,
-    bumpKey = '',
     onClick = () => {}
   } = $props()
 
@@ -37,7 +36,7 @@
     <div class="art-layer"><ArtComp {...artProps} /></div>
   {/if}
   {#if text}
-    <span class="wheel-row-text" style={textStyle} key={bumpKey}>{text}</span>
+    <span class="wheel-row-text" style={textStyle}>{text}</span>
   {/if}
 </button>
 

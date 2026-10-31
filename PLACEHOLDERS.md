@@ -1,138 +1,155 @@
 # TRACKING-ICE Path Register
 
-Every box on the screen, identified by ONE dotted path that means the same thing in all three JSON planes.
+One dotted path per box. The same path means the same box in all three JSON planes:
+`layout.json` (`box(path)` + `paint(path)`) = geometry + visual;
+`text.json` (`t(path)` + `s(path)`) = copy + typography;
+`content.json` (`renderFor(path)` + `propsFor(path)`) = what renders.
 
-**The rule:** a path is only real if the box's file calls all three translators (`box(path)`, `s(path)`/`t(path)`, `renderFor(path)`). A key that no file reads is decoration.
+A path is **real** only if the box's file calls all three translators.
+A key no file reads is decoration - you edit it and nothing happens.
 
-**Target state:** 40 boxes, 3 keys each = 120 keys total.
-
----
-
-## L1 - The canvas (1 box)
-
-| path | parent | purpose | layout.json | text.json | content.json |
-|---|---|---|---|---|---|
-| `mainscreen` | - | the whole screen, 0/0/100/100 | top/left/width/height/z, outline off, fill off | - | renders the background image |
+**Total: 48 real paths.** 1 canvas + 8 temp + 6 wheel + 6 calendar + 7 nominal/pad +
+7 upload/crop + 3 action + 3 actionPreview + 4 outletManual + 3 popups = 48.
 
 ---
 
-## L2/L3 - Five answer collection rows (8 boxes)
+## L1 - Canvas (1)
 
-| path | parent | purpose | layout | text | content |
-|---|---|---|---|---|---|
-| `temp` | mainscreen | the 5-row stack, top 76% | box, outline on, fill off | - | - |
-| `temp.row1` | temp | Q1 BA name | box, outline/fill on | row copy, index | the answer pill |
-| `temp.row2` | temp | Q2 outlet | box, outline/fill on | row copy, index | the answer pill |
-| `temp.row3` | temp | Q3 date | box, outline/fill on | row copy, index | the answer pill |
-| `temp.row4` | temp | Q4 nominal | box, outline/fill on | row copy, index | the answer pill |
-| `temp.row5` | temp | Q5 photo + crop preview pair | box, outline/fill on | row copy, index | - |
-| `temp.row5.original` | temp.row5 | original photo left half 3:4 | box | - | the uploaded image |
-| `temp.row5.crop` | temp.row5 | crop preview right half 3:4 | box | - | the cropped image |
-
----
-
-## L2/L3 - The expand/collapse wheel (6 boxes)
-
-| path | parent | purpose | layout | text | content |
-|---|---|---|---|---|---|
-| `wheel` | mainscreen | the wheel nest (row1+row2+row3+list+confirm) | box, outline on, fill off | - | - |
-| `wheel.row1` | wheel | top bounce row (slides in from above) | box, outline/fill on | - | glow or band art |
-| `wheel.row2` | wheel | center row, always visible | box, outline/fill on | the selected name | the picker button face |
-| `wheel.row3` | wheel | bottom bounce row (slides in from below) | box, outline/fill on | - | glow or band art |
-| `wheel.list` | wheel | the scroll-snap option list, z3 | box, outline on, fill off | list item fontSize/align | - |
-| `wheel.confirm` | wheel | tap-to-confirm area, z4 over row2 | box, outline/fill on | - | - |
-
----
-
-## L2/L3 - Calendar (5 boxes)
-
-| path | parent | purpose | layout | text | content |
-|---|---|---|---|---|---|
-| `calendar` | mainscreen | the date picker trigger + popup shell | box, outline/fill on | prompt, fontSize/align | - |
-| `calendar.grid` | calendar | the popup date grid (title + weekdays + days) | box | grid.title/weekday/day typography | the grid background art |
-| `calendar.grid.title` | calendar.grid | month title row typography | - | fontSize/align | - |
-| `calendar.grid.weekday` | calendar.grid | weekday row typography | - | fontSize/align, ["Sen","Sel"...] | - |
-| `calendar.grid.day` | calendar.grid | day cell typography | - | fontSize/align | - |
-
----
-
-## L2/L3 - Nominal + keypad (7 boxes)
-
-| path | parent | purpose | layout | text | content |
-|---|---|---|---|---|---|
-| `nominal` | mainscreen | the nominal trigger + display + pad | box, outline/fill on | - | - |
-| `nominal.trigger` | nominal | the closed state display | box | prompt, fontSize/align | the display frame art |
-| `nominal.display` | nominal | the open state formatted display | box | prompt, fontSize/align | the display frame art |
-| `pad` | nominal | the 12-key grid (0-9, C, OK) | box | - | the pad background art |
-| `pad.key` | pad | digit key typography (0-9 share this) | - | fontSize/align | - |
-| `pad.clear` | pad | C key | box + typography | text "C", fontSize/align | the key face art |
-| `pad.ok` | pad | OK key | box + typography | text "OK", fontSize/align | the key face art |
-
----
-
-## L2/L3 - Upload + crop (7 boxes)
-
-| path | parent | purpose | layout | text | content |
-|---|---|---|---|---|---|
-| `upload` | mainscreen | the photo upload trigger + status | box, outline/fill on | pick/change/loading copy, fontSize/align | - |
-| `upload.pick` | upload | the trigger button (pick foto) | box | - | the button art |
-| `upload.change` | upload | the change-crop button (ubah crop) | box | - | the button art |
-| `crop` | mainscreen | the frame-cropper popup (1:1 square) | box | - | - |
-| `crop.frame` | crop | the crop frame overlay (the 1:1 box) | box | - | the frame art |
-| `crop.cancel` | crop | Cancel button | box | text "Cancel", fontSize/align | the button art |
-| `crop.confirm` | crop | Confirm button | box | text "Confirm", fontSize/align | the button art |
-
----
-
-## L2/L3 - Action (3 boxes)
-
-| path | parent | purpose | layout | text | content |
-|---|---|---|---|---|---|
-| `action` | mainscreen | the Reset + Confirm button row | box, outline/fill on | - | - |
-| `action.reset` | action | Reset button | box | text "RESET", fontSize/align | renders Btn (already wired) |
-| `action.confirm` | action | Confirm button | box | text "CONFIRM", fontSize/align | renders Btn (already wired) |
-
----
-
-## L2 - Three popups (3 boxes)
-
-| path | parent | purpose | layout | text | content |
-|---|---|---|---|---|---|
-| `warn` | mainscreen | nominal >15000 warning popup | box | warn.nominal message, fontSize/align | the popup shell art |
-| `instr` | mainscreen | crop instruction popup | box | instr.crop message, fontSize/align | the popup shell art |
-| `result` | mainscreen | send-result popup (SENDING.../TERKIRIM/GAGAL) | box | result.sending/ok/fail, fontSize/align | the popup shell art |
-
----
-
-## Summary
-
-| group | count | notes |
+| path | parent | purpose |
 |---|---|---|
-| L1 canvas | 1 | mainscreen |
-| temp rows | 8 | 5 rows + row5 split into original/crop |
-| wheel | 6 | nest + 3 rows + list + confirm |
-| calendar | 5 | trigger + grid + 3 typography rows |
-| nominal + pad | 7 | trigger, display, pad + 3 key types |
-| upload + crop | 7 | upload trigger + change + crop frame + 2 buttons |
-| action | 3 | container + reset + confirm |
-| popups | 3 | warn, instr, result |
-| **TOTAL** | **40** | every path exists in layout, text, and content |
+| `mainscreen` | - | whole screen, 0/0/100/100. Background image lands here. |
 
 ---
 
-## What changes when a box is connected
+## L2 - Five answer rows (8)
 
-**Before:** the box shows its outline/fill (the colored wireframe from `layout.json`).
-
-**After:** the box calls `renderFor(path)` and paints the component inside its own box. The outline/fill stays exactly whatever `layout.json` says (the planes are independent), so connecting a box never hides its wireframe unless you turn `outline.on: false`. The component is an ART LAYER - every sprite layer keeps `pointer-events: none`, so the placeholder keeps the behavior (scroll, tap-confirm, keypad hold-clear, cropper pan/pinch).
+| path | parent | purpose |
+|---|---|---|
+| `temp` | mainscreen | the 5-row stack (top 76%) |
+| `temp.row1` | temp | Q1 BA name |
+| `temp.row2` | temp | Q2 outlet |
+| `temp.row3` | temp | Q3 date |
+| `temp.row4` | temp | Q4 nominal |
+| `temp.row5` | temp | Q5 photo + crop preview pair |
+| `temp.row5.original` | temp.row5 | original photo, left half, 3:4 |
+| `temp.row5.crop` | temp.row5 | crop preview, right half, 3:4 |
 
 ---
 
-## The dummy
+## L3 - Picker wheel (6)
 
-Every box starts with the same dummy key in `content.json`:
-```json
-"wheel.row2": { "render": "image", "src": "/dummy.png", "fit": "stretch", "scale": 100 }
-```
+| path | parent | purpose |
+|---|---|---|
+| `wheel` | mainscreen | wheel container (row1/row2/row3/list/confirm) |
+| `wheel.row1` | wheel | top bounce row |
+| `wheel.row2` | wheel | center row (always visible) |
+| `wheel.row3` | wheel | bottom bounce row |
+| `wheel.list` | wheel | scroll-snap option list, z3 |
+| `wheel.confirm` | wheel | tap-to-confirm area over row2, z4 |
 
-`/dummy.png` is a fully transparent PNG (1x1 or small square). The `image` component already exists and renders any src with fit/scale, so the dummy is not a new component - it is the existing component pointed at a transparent file. You change the value in JSON - swap `/dummy.png` for a real sprite, or change `"render"` to `"pil"`, `"picker_btn"`, `"picker_glow"`, `"btn"`, `"popup"` - and never open code.
+---
+
+## L4 - Calendar (6)
+
+| path | parent | purpose |
+|---|---|---|
+| `calendar` | mainscreen | trigger + popup shell |
+| `calendar.popup` | calendar | modal popup shell (the `dialog`) |
+| `calendar.grid` | calendar | day grid (title + weekdays + days) |
+| `calendar.grid.title` | calendar.grid | month/year title |
+| `calendar.grid.weekday` | calendar.grid | Sen..Min header |
+| `calendar.grid.day` | calendar.grid | day cell |
+
+---
+
+## L5 - Nominal + pad (7)
+
+| path | parent | purpose |
+|---|---|---|
+| `nominal` | mainscreen | trigger + display + pad |
+| `nominal.trigger` | nominal | collapsed trigger (SELECT NOMINAL) |
+| `nominal.display` | nominal | open-state formatted display |
+| `nominal.pad` | nominal | the 12-key grid (0-9, C, OK) |
+| `nominal.pad.key` | nominal.pad | digit keys 0-9 |
+| `nominal.pad.clear` | nominal.pad | C key (hold to clear) |
+| `nominal.pad.ok` | nominal.pad | OK key |
+
+---
+
+## L6 - Upload + crop (7)
+
+| path | parent | purpose |
+|---|---|---|
+| `upload` | mainscreen | photo upload trigger + status |
+| `upload.pick` | upload | pick-file trigger |
+| `upload.change` | upload | change-crop button |
+| `crop` | mainscreen | frame-cropper popup |
+| `crop.frame` | crop | 1:1 (or 3:4) crop frame overlay |
+| `crop.cancel` | crop | Cancel button |
+| `crop.confirm` | crop | Confirm button |
+
+---
+
+## L7 - Action bar (3)
+
+| path | parent | purpose |
+|---|---|---|
+| `action` | mainscreen | Reset + Confirm row |
+| `action.reset` | action | Reset button |
+| `action.confirm` | action | Confirm button |
+
+---
+
+## L8 - Action preview (3)
+
+Shown only when a crop exists (`mainscreen.svelte:366` swaps `action` -> `actionPreview`).
+
+| path | parent | purpose |
+|---|---|---|
+| `actionPreview` | mainscreen | preview-state Reset + Confirm row |
+| `actionPreview.reset` | actionPreview | Reset button (preview) |
+| `actionPreview.confirm` | actionPreview | Confirm button (preview) |
+
+---
+
+## L9 - Manual outlet entry (4)
+
+| path | parent | purpose |
+|---|---|---|
+| `outletManual` | mainscreen | manual outlet entry dialog |
+| `outletManual.input` | outletManual | text input + pill face |
+| `outletManual.list` | outletManual | scroll-snap filtered list |
+| `outletManual.confirm` | outletManual | Confirm button |
+
+---
+
+## L10 - Popups (3)
+
+| path | parent | purpose |
+|---|---|---|
+| `warn` | mainscreen | nominal > 15000 warning |
+| `instr` | mainscreen | crop instruction popup |
+| `result` | mainscreen | send result (SENDING.../TERKIRIM/GAGAL) |
+
+---
+
+## How to use this register
+
+- The register is generated from `public/layout.json`'s 48 paths. If layout.json gains or loses a
+  node, this file follows (edit both in the same change).
+- The other plane files (`text.json`, `content.json`) must carry the same 48 keys. A `.disabled`-style
+  dangling key in one file is decoration: edits to it change nothing.
+- `layout.json` geometry for several paths still reads `TBD` / node absent -> assume neither
+  position nor size exists until measured. Do not invent.
+
+## Dummy and the planes
+
+Every box starts on `/dummy.png` (a transparent image). All three planes are independent:
+
+- `outline.on` / `fill.on` are off by default (a wireframe appears, not art).
+- Connect a box by changing its `content.json` value, never its geometry.
+- Changing `layout.json` moves the box. Changing `text.json` changes words. These do not
+  touch each other.
+
+*Register reconciled 2026-10-31: pad renamed to `nominal.pad`, added `outletManual` (4),
+`calendar.popup`, `actionPreview` (3). Total 48 (was claimed 40).*

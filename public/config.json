@@ -3,18 +3,9 @@
   "token": "anti-spam-bukan-rahasia",
   "requestTimeoutMs": 45000,
   "image": {
-    "maxSize": 1600,
-    "quality": 0.7,
-    "cropFrameRatio": 0.75,
-    "cropPadColor": "#ffffff",
     "cropContract": 1
   },
   "limits": {
-    "nominalMaxDigits": 12,
-    "nominalMax": 15000,
-    "outletMaxLen": 80
-  },
-  "labels": {
-    "title": "Tracking Ice"
+    "nominalMax": 15000
   }
 }

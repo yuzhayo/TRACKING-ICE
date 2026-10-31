@@ -102,7 +102,7 @@
   },
   "action": {
     "reset": {
-      "fontSize": "8qi",
+      "fontSize": "8cqi",
       "align": "center",
       "text": "RESET"
     },
@@ -149,7 +149,7 @@
   },
   "actionPreview": {
     "reset": {
-      "fontSize": "8qi",
+      "fontSize": "8cqi",
       "align": "center",
       "text": "RESET"
     },

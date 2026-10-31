@@ -11,8 +11,7 @@
   let {
     src = '',
     fit = 'fill',
-    scale = 100,
-    alt = ''
+    scale = 100
   } = $props()
 
   const size = $derived(
@@ -23,7 +22,7 @@
   )
 </script>
 
-<div class="image-fill" style={`background-image: url('${src}'); background-size: ${size};`} role="img" aria-label={alt}></div>
+<div class="image-fill" style={`background-image: url('${src}'); background-size: ${size};`} role="img"></div>
 
 <style>
   .image-fill {

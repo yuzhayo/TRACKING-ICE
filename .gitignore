@@ -3,3 +3,7 @@ dist/
 .npm/
 package-lock.json
 *.log
+
+# Quarantined dead code (moved from live areas; out of the app, but recoverable from /UNUSED locally)
+UNUSED/
+

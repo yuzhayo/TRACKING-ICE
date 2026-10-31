@@ -5,7 +5,6 @@
 
   let {
     path = '',
-    hidden = false,
     answers = ['', '', '', '', ''],
     cropOriginal = '',
     cropPreview = '',
@@ -25,7 +24,6 @@
 
 <section
   class="temp-placeholder"
-  class:hidden={hidden}
   aria-label="Temp placeholder"
   style={box(path) + paint(path)}
 >
@@ -81,10 +79,6 @@
     background-size: 100% 0.6%, 0.6% 100%, 100% 0.6%, 0.6% 100%;
     background-position: 0% 0%, 100% 0%, 0% 100%, 0% 0%;
     background-repeat: no-repeat;
-  }
-
-  .temp-placeholder.hidden {
-    display: none;
   }
 
   /* Row 5: two 3:4 children, each placed by its own node in layout.json -

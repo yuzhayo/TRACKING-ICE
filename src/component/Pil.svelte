@@ -15,30 +15,21 @@
      Wired through content.json: any entry whose "render" is "pil" gets this component. */
 
   let {
-    label = '',
     textStyle = s('pil'),
-    lit = false,
-    open = false,
-    onClick = () => {},
-    children
+    onClick = () => {}
   } = $props()
 </script>
 
 <button
   class="pil"
-  class:lit
-  class:open
   type="button"
+  aria-label="Pill button"
   {onClick}
 >
   <span class="pil-dasar" aria-hidden="true"></span>
   <span class="pil-light" aria-hidden="true"></span>
   <span class="pil-band" aria-hidden="true"></span>
-  {#if children}
-    {@render children()}
-  {:else}
-    <span class="pil-teks" style={textStyle}>{label}</span>
-  {/if}
+  <span class="pil-teks" style={textStyle}></span>
 </button>
 
 <style>
@@ -80,7 +71,6 @@
     transition: opacity 0.16s ease;
   }
 
-  .pil.lit .pil-light,
   .pil:focus-within .pil-light {
     opacity: 1;
   }
@@ -113,10 +103,6 @@
     pointer-events: none;
   }
 
-  /* Wheel open: the pill holds its place, the wheel draws in it. */
-  .pil.open > * {
-    visibility: hidden;
-  }
 
   @media (prefers-reduced-motion: reduce) {
     .pil-light {
