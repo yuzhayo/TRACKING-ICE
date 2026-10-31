@@ -43,7 +43,6 @@
   <span class="edge edge-right" aria-hidden="true"></span>
   <span class="edge edge-bottom" aria-hidden="true"></span>
   <span class="edge edge-left" aria-hidden="true"></span>
-  <span class="temp-row-index" style={s('temp.rowIndex')} aria-hidden="true">{label}</span>
   <span class="temp-row-text" style={s('temp.row')}>{text}</span>
 </div>
 
@@ -105,18 +104,6 @@
     left: 0%;
     width: 0.8cqi;
     height: 100%;
-  }
-
-  .temp-row-index {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    z-index: 2;
-    padding: 0 1.5cqi;
-    font-weight: 700;
-    line-height: 1;
-    color: rgba(254, 202, 202, 0.5);
-    pointer-events: none;
   }
 
   .temp-row-text {

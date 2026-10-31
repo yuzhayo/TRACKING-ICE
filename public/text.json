@@ -33,6 +33,7 @@
   },
   "calendar": {
     "fontSize": "min(5cqi, 30cqb)",
+    "fontWeight": "700",
     "align": "center",
     "prompt": "PILIH TANGGAL",
     "grid": {
@@ -62,11 +63,13 @@
   "nominal": {
     "trigger": {
       "fontSize": "min(5cqi, 35cqb)",
+      "fontWeight": "700",
       "align": "center",
       "prompt": "SELECT NOMINAL"
     },
     "display": {
       "fontSize": "min(5cqi, 35cqb)",
+      "fontWeight": "700",
       "align": "center",
       "prompt": "Masukkan nominal"
     },
@@ -89,6 +92,7 @@
   },
   "upload": {
     "fontSize": "min(5cqi, 35cqb)",
+    "fontWeight": "700",
     "align": "center",
     "pick": "PILIH FOTO",
     "change": "UBAH CROP",
@@ -96,7 +100,7 @@
   },
   "crop": {
     "button": {
-      "fontSize": "min(5cqi, 5cqb)",
+      "fontSize": "8cqi",
       "align": "center"
     },
     "cancel": "Cancel",

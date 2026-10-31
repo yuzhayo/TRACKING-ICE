@@ -43,7 +43,7 @@
     onclick={() => onExpandedChange(true)}
   >{displayDate}</button>
 
-  <PopupPlaceholder open={expanded && !hidden} onClose={() => onExpandedChange(false)}>
+  <PopupPlaceholder path="calendar.popup" open={expanded && !hidden} onClose={() => onExpandedChange(false)}>
     {#if expanded}
       <DateGrid value={value} onSelect={(dateKey) => { onSelect(dateKey); onExpandedChange(false) }} />
     {/if}
@@ -65,6 +65,10 @@
   }
 
   .calendar-trigger {
+    /* The art layer is a positioned sibling at z-index 0, so a static face here
+       would paint UNDER whatever content.json puts in this box. */
+    position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     border: 0;

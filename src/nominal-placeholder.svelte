@@ -23,14 +23,24 @@
     onExpandedChange?: (expanded: boolean) => void
   } = $props()
 
+  const MIN = 1000
+
   let draft = $state('')
   let warnOpen = $state(false)
   let wasOver = $state(false)
 
   const ArtComp = $derived(renderFor(path))
   const artProps = $derived(propsFor(path))
+  const TrigComp = $derived(renderFor(`${path}.trigger`))
+  const trigProps = $derived(propsFor(`${path}.trigger`))
+  const DispComp = $derived(renderFor(`${path}.display`))
+  const dispProps = $derived(propsFor(`${path}.display`))
 
   const overLimit = $derived(draft !== '' && Number(draft) > max)
+
+  // An amount only counts when it is typed AND inside [MIN, max]. Empty and a
+  // value under the floor both keep OK disabled.
+  const validAmount = $derived(draft !== '' && Number(draft) >= MIN && Number(draft) <= max)
 
   $effect(() => {
     if (expanded && !hidden) {
@@ -70,8 +80,16 @@
     checkOver()
   }
 
+  // Closing the warning IS the reset. The crossing flag goes back with the
+  // digits, otherwise the next over-cap tap would stay silent.
+  function dismissWarn() {
+    warnOpen = false
+    draft = ''
+    wasOver = false
+  }
+
   function confirm() {
-    if (overLimit) return
+    if (!validAmount) return
     onConfirm(draft)
     onExpandedChange(false)
   }
@@ -82,10 +100,16 @@
     <div class="art-layer"><ArtComp {...artProps} /></div>
   {/if}
   {#if expanded}
+    {#if DispComp}
+      <div class="sub-art" style={box(`${path}.display`)}><DispComp {...dispProps} /></div>
+    {/if}
     <output class="nominal-display" class:invalid={overLimit} aria-label="Nominal nota" aria-live="polite" style={s('nominal.display')}>{displayAmount}</output>
-    <NumberPadPlaceholder path={`${path}.pad`} onDigit={appendDigit} onDelete={deleteOne} onClear={clearAll} onConfirm={confirm} confirmDisabled={overLimit} />
-    <NominalWarningPopup open={warnOpen} {max} onClose={() => warnOpen = false} />
+    <NumberPadPlaceholder path={`${path}.pad`} onDigit={appendDigit} onDelete={deleteOne} onClear={clearAll} onConfirm={confirm} confirmDisabled={!validAmount} />
+    <NominalWarningPopup open={warnOpen} {max} onClose={dismissWarn} />
   {:else}
+    {#if TrigComp}
+      <div class="sub-art" style={box(`${path}.trigger`)}><TrigComp {...trigProps} /></div>
+    {/if}
     <button class="nominal-trigger" type="button" aria-label="Nominal nota" style={s('nominal.trigger')} onclick={() => onExpandedChange(true)}>{collapsedLabel}</button>
   {/if}
 </section>
@@ -98,6 +122,15 @@
     z-index: 0;
   }
 
+  /* Same rule as the placeholder art: the face must be positioned above it,
+     so the sub-box art never hides the text. */
+  .sub-art {
+    position: absolute;
+    container-type: size;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .nominal-placeholder {
     position: absolute;
     container-type: size;
@@ -106,6 +139,7 @@
   .nominal-trigger {
     position: absolute;
     inset: 0%;
+    z-index: 1;
     border: 0;
     padding: 0 3%;
     background: var(--fill);
@@ -118,6 +152,7 @@
   .nominal-display {
     position: absolute;
     inset: 0%;
+    z-index: 1;
     display: grid;
     place-items: center;
     padding-inline: 3%;

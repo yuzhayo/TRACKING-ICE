@@ -24,7 +24,7 @@
     photo?: string
     crop?: CropTransform | null
     onPhoto?: (dataUrl: string, base64: string) => void
-    onCrop?: (t: CropTransform) => void
+    onCrop?: (t: CropTransform | null) => void
     onConfirm?: (label: string) => void
     onExpandedChange?: (expanded: boolean) => void
   } = $props()
@@ -39,6 +39,10 @@
 
   const ArtComp = $derived(renderFor(path))
   const artProps = $derived(propsFor(path))
+  // The face slot follows the label it sits under: pick before a photo, change after.
+  const slotPath = $derived(photo ? `${path}.change` : `${path}.pick`)
+  const FaceComp = $derived(renderFor(slotPath))
+  const faceProps = $derived(propsFor(slotPath))
   let instrOpen = $state(false)
 
   // A crop is "not cropped" when it is still the untouched original framing.
@@ -88,6 +92,15 @@
     onConfirm('Foto siap')
     onExpandedChange(false)
   }
+
+  // Cancelling discards the photo, so the trigger is honestly "PILIH FOTO" again
+  // and a tap re-opens the gallery - no re-pick gesture inside the cropper.
+  function cancelCrop() {
+    onPhoto('', '')
+    onCrop(null)
+    error = ''
+    onExpandedChange(false)
+  }
 </script>
 
 <section class="upload-placeholder" {hidden} aria-label="Upload placeholder" style={box(path) + paint(path)}>
@@ -103,6 +116,9 @@
   />
 
   {#if !crop}
+    {#if FaceComp}
+      <div class="sub-art" style={box(slotPath)}><FaceComp {...faceProps} /></div>
+    {/if}
     <button
       class="upload-trigger"
       type="button"
@@ -117,7 +133,7 @@
 {#if expanded && !hidden}
   <div class="crop-overlay" role="dialog" aria-label="Potong foto">
     {#if photo}
-      <FrameCropper path="crop" src={photo} initial={crop} {padColor} onOk={commitCrop} onCancel={() => onExpandedChange(false)} />
+      <FrameCropper path="crop" src={photo} initial={crop} {padColor} onOk={commitCrop} onCancel={cancelCrop} />
     {:else}
       <div class="crop-pick" style={s('crop.pick')}>
         <p>{error || t('crop.pickPrompt')}</p>
@@ -137,6 +153,13 @@
     z-index: 0;
   }
 
+  .sub-art {
+    position: absolute;
+    container-type: size;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .upload-placeholder {
     position: absolute;
     container-type: size;
@@ -147,6 +170,10 @@
   }
 
   .upload-trigger {
+    /* The art layer is a positioned sibling at z-index 0, so a static face here
+       would paint UNDER whatever content.json puts in this box. */
+    position: relative;
+    z-index: 1;
     width: 100%;
     height: 100%;
     border: 0;

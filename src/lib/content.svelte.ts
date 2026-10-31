@@ -21,6 +21,7 @@ import PilJawaban from '../component/PilJawaban.svelte'
 import Popup from '../component/Popup.svelte'
 import PickerBtn from '../component/PickerBtn.svelte'
 import PickerGlow from '../component/PickerGlow.svelte'
+import PadKey from '../component/PadKey.svelte'
 
 /* The registry only makes a component REACHABLE by key. Which placeholder
    renders which key is public/content.json's decision, and nothing is pointed
@@ -36,7 +37,8 @@ const registry: Record<string, unknown> = {
   jawaban: PilJawaban,
   popup: Popup,
   picker_btn: PickerBtn,
-  picker_glow: PickerGlow
+  picker_glow: PickerGlow,
+  pad_key: PadKey
 }
 
 type ContentNode = { render?: string; [prop: string]: unknown }

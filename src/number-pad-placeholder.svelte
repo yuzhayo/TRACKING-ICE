@@ -32,14 +32,13 @@
 
 <style>
   .number-pad-placeholder {
-    --pad-edge-color: rgba(110, 231, 183, 0.55);
     position: absolute;
     box-sizing: border-box;
     background-image:
-      linear-gradient(var(--pad-edge-color), var(--pad-edge-color)),
-      linear-gradient(var(--pad-edge-color), var(--pad-edge-color)),
-      linear-gradient(var(--pad-edge-color), var(--pad-edge-color)),
-      linear-gradient(var(--pad-edge-color), var(--pad-edge-color));
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line)),
+      linear-gradient(var(--line), var(--line));
     background-size: 100% 0.6%, 0.6% 100%, 100% 0.6%, 0.6% 100%;
     background-position: 0% 0%, 100% 0%, 0% 100%, 0% 0%;
     background-repeat: no-repeat;

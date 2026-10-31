@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
-  import { paint } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
   import { renderFor, propsFor } from './lib/content.svelte'
 
   let {
@@ -39,7 +39,7 @@
 </script>
 
 <dialog bind:this={dialog} class="popup-placeholder" aria-label="Popup" onclick={handleClick} onclose={onClose}>
-  <section class="popup-panel" style={paint(path)}>
+  <section class="popup-panel" style={box(path) + paint(path)}>
     {#if ArtComp}
       <div class="art-layer"><ArtComp {...artProps} /></div>
     {/if}
@@ -75,12 +75,15 @@
   }
 
   .popup-panel {
+    /* absolute, so the left/top from box() take effect; the box itself is
+       layout.json's (calendar.popup / warn / instr / result) */
+    position: absolute;
     container-type: size;
     box-sizing: border-box;
-    width: min(92%, 110dvh);
-    height: min(82%, 125dvw);
-    background: #0d1420;
-    outline: 0.3dvi solid #c084fc;
+    /* the shell's fill and border come from layout.json (paint(path));
+       on:false or opacity:0 makes them transparent */
+    background: var(--fill);
+    outline: 0.3dvi solid var(--line);
     outline-offset: 0;
   }
 

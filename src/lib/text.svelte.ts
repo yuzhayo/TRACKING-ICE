@@ -6,17 +6,18 @@
    A node may carry:
      text     -> the string shown
      fontSize -> CSS font-size value (e.g. "4cqi", "min(5cqi, 35cqb)")
+     fontWeight -> CSS font-weight value (e.g. "400", "700")
      align    -> CSS text-align value (left | center | right)
      ...or a plain string (a leaf label)
 
    t('wheel.prompt.ba')  -> the string at that path
-   s('wheel.row2')       -> "font-size: ...; text-align: ...;"
+   s('wheel.row2')       -> "font-size: ...; font-weight: ...; text-align: ...;"
 
    A missing key fails visibly: t() returns "[[path]]" and logs, so a typo or a
    dropped string shows up on screen instead of silently using old code text.
 */
 
-type TextNode = string | { text?: string; fontSize?: string; align?: string; [k: string]: unknown }
+type TextNode = string | { text?: string; fontSize?: string; fontWeight?: string; align?: string; [k: string]: unknown }
 type TextTree = Record<string, TextNode>
 
 const TEXT_CACHE_KEY = 'text:v1'
@@ -88,6 +89,7 @@ export function s(path: string): string {
   }
   const parts: string[] = []
   if (node.fontSize) parts.push(`font-size: ${node.fontSize}`)
+  if (node.fontWeight) parts.push(`font-weight: ${node.fontWeight}`)
   if (node.align) parts.push(`text-align: ${node.align}`)
   return parts.join('; ') + ';'
 }

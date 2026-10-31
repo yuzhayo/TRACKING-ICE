@@ -15,6 +15,12 @@
 
   const ArtComp = $derived(renderFor(path))
   const artProps = $derived(propsFor(path))
+  const origPath = $derived(`${path}.row5.original`)
+  const cropPath = $derived(`${path}.row5.crop`)
+  const OrigComp = $derived(renderFor(origPath))
+  const origProps = $derived(propsFor(origPath))
+  const CropComp = $derived(renderFor(cropPath))
+  const cropProps = $derived(propsFor(cropPath))
 </script>
 
 <section
@@ -33,12 +39,20 @@
 
   {#if hasCrop}
     <div class="crop-pair" aria-label="Pratinjau crop" style={box(`${path}.row5`)}>
-      <div class="crop-section">
-        <div class="crop-child"><img src={cropOriginal} alt="Foto asli" /></div>
+      <div class="crop-section" style={box(origPath)}>
+        <div class="crop-child" style={paint(origPath)}>
+          <img src={cropOriginal} alt="Foto asli" />
+          {#if OrigComp}
+            <div class="crop-frame-art"><OrigComp {...origProps} /></div>
+          {/if}
+        </div>
       </div>
-      <div class="crop-section">
-        <button type="button" class="crop-child crop-edit" aria-label="Ubah crop" onclick={() => onSelect(5)}>
+      <div class="crop-section" style={box(cropPath)}>
+        <button type="button" class="crop-child crop-edit" style={paint(cropPath)} aria-label="Ubah crop" onclick={() => onSelect(5)}>
           <img src={cropPreview} alt="Hasil crop" />
+          {#if CropComp}
+            <div class="crop-frame-art"><CropComp {...cropProps} /></div>
+          {/if}
         </button>
       </div>
     </div>
@@ -73,30 +87,39 @@
     display: none;
   }
 
-  /* Row 5: two equal sections, each holding a 3:4 child placeholder. */
+  /* Row 5: two 3:4 children, each placed by its own node in layout.json -
+     temp.row5.original and temp.row5.crop - so the gap between them is a plane
+     number (crop.left minus original.width), not a CSS literal. */
   .crop-pair {
     position: absolute;
     box-sizing: border-box;
-    display: flex;
-    gap: 3%;
   }
 
   .crop-section {
-    flex: 1;
-    min-width: 0;
-    min-height: 0;
+    position: absolute;
+    box-sizing: border-box;
     container-type: size;
     display: grid;
     place-items: center;
   }
 
   .crop-child {
+    position: relative;
     width: min(100cqw, 75cqh);
     aspect-ratio: 3 / 4;
     overflow: hidden;
     background: #0f172a;
-    outline: 0.5cqi solid #fb923c;
+    outline: 0.5cqi solid var(--line);
     outline-offset: -0.5cqi;
+  }
+
+  /* The gold frame is the outline of the thumbnail, so it must never eat the
+     tap that reopens the crop on the right half. */
+  .crop-frame-art {
+    position: absolute;
+    inset: 0%;
+    z-index: 2;
+    pointer-events: none;
   }
 
   .crop-child img {

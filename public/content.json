@@ -13,43 +13,43 @@
   },
   "temp.row1": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_btn_common_00_l.png",
     "fit": "stretch",
     "scale": 100
   },
   "temp.row2": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_btn_common_00_l.png",
     "fit": "stretch",
     "scale": 100
   },
   "temp.row3": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_btn_common_00_l.png",
     "fit": "stretch",
     "scale": 100
   },
   "temp.row4": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_btn_common_00_l.png",
     "fit": "stretch",
     "scale": 100
   },
   "temp.row5": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_btn_common_00_l.png",
     "fit": "stretch",
     "scale": 100
   },
   "temp.row5.original": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_base_dialog_frame.png",
     "fit": "stretch",
     "scale": 100
   },
   "temp.row5.crop": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_base_dialog_frame.png",
     "fit": "stretch",
     "scale": 100
   },
@@ -61,21 +61,19 @@
   },
   "wheel.row1": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_base_footer_menu_active_semicircle1.png",
     "fit": "stretch",
     "scale": 100
   },
   "wheel.row2": {
-    "render": "image",
-    "src": "/dummy.png",
-    "fit": "stretch",
-    "scale": 100
+    "render": "pil"
   },
   "wheel.row3": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_base_footer_menu_active_semicircle.png",
     "fit": "stretch",
     "scale": 100
+
   },
   "wheel.list": {
     "render": "image",
@@ -90,6 +88,9 @@
     "scale": 100
   },
   "calendar": {
+    "render": "pil"
+  },
+  "calendar.popup": {
     "render": "image",
     "src": "/dummy.png",
     "fit": "stretch",
@@ -97,7 +98,7 @@
   },
   "calendar.grid": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/bg_12.png",
     "fit": "stretch",
     "scale": 100
   },
@@ -126,14 +127,12 @@
     "scale": 100
   },
   "nominal.trigger": {
-    "render": "image",
-    "src": "/dummy.png",
-    "fit": "stretch",
-    "scale": 100
+    "render": "pil"
+
   },
   "nominal.display": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_btn_common_01_m.png",
     "fit": "stretch",
     "scale": 100
   },
@@ -144,40 +143,28 @@
     "scale": 100
   },
   "upload.pick": {
-    "render": "image",
-    "src": "/dummy.png",
-    "fit": "stretch",
-    "scale": 100
+    "render": "pil"
   },
   "upload.change": {
-    "render": "image",
-    "src": "/dummy.png",
-    "fit": "stretch",
-    "scale": 100
+    "render": "pil"
   },
   "crop": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/bg_12.png",
     "fit": "stretch",
     "scale": 100
   },
   "crop.frame": {
     "render": "image",
-    "src": "/dummy.png",
+    "src": "/utx_base_dialog_frame.png",
     "fit": "stretch",
     "scale": 100
   },
   "crop.cancel": {
-    "render": "image",
-    "src": "/dummy.png",
-    "fit": "stretch",
-    "scale": 100
+    "render": "btn"
   },
   "crop.confirm": {
-    "render": "image",
-    "src": "/dummy.png",
-    "fit": "stretch",
-    "scale": 100
+    "render": "btn"
   },
   "action": {
     "render": "image",
@@ -216,21 +203,21 @@
     "scale": 100
   },
   "nominal.pad.key": {
-    "render": "image",
-    "src": "/dummy.png",
-    "fit": "stretch",
-    "scale": 100
+    "render": "pad_key",
+    "base": "/key_base.png",
+    "press": "/key_press.png",
+    "off": "/key_off.png"
   },
   "nominal.pad.clear": {
-    "render": "image",
-    "src": "/dummy.png",
-    "fit": "stretch",
-    "scale": 100
+    "render": "pad_key",
+    "base": "/key_base.png",
+    "press": "/key_press.png",
+    "off": "/key_off.png"
   },
   "nominal.pad.ok": {
-    "render": "image",
-    "src": "/dummy.png",
-    "fit": "stretch",
-    "scale": 100
+    "render": "pad_key",
+    "base": "/key_base.png",
+    "press": "/key_press.png",
+    "off": "/key_off.png"
   }
 }

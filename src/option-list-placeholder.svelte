@@ -17,9 +17,18 @@
 
   let listEl = $state(null)
   let activeIndex = $state(0)
+  // Keep the items that were on screen when the list started closing, so the
+  // collapse animation finishes with the old set instead of the newly swapped one.
+  let displayOptions = $state([])
   let programmatic = false
   let collapsing = $state(false)
   let prevOpen = $state(false)
+
+  $effect(() => {
+    if (open || !collapsing) {
+      displayOptions = [...options]
+    }
+  })
 
   function rowHeight() {
     return listEl ? listEl.clientHeight / 5 : 0
@@ -78,6 +87,12 @@
     if (event.animationName.includes('clip-collapse')) collapsing = false
   }
 
+  $effect(() => {
+    if (!collapsing) return
+    const timer = setTimeout(() => { collapsing = false }, 320)
+    return () => clearTimeout(timer)
+  })
+
   // Text opacity is purely distance-from-center; show/hide is the clip only.
   function itemOpacity(i) {
     const d = Math.abs(i - activeIndex)
@@ -99,7 +114,7 @@
   {#if ArtComp}
     <div class="art-layer"><ArtComp {...artProps} /></div>
   {/if}
-  {#each options as option, i (option)}
+  {#each displayOptions as option, i (option)}
     <div class="option-item" class:active={open && i === activeIndex} style="opacity: {itemOpacity(i)}; {s(path)}" role="option" aria-selected={i === activeIndex}>{option}</div>
   {/each}
 </div>

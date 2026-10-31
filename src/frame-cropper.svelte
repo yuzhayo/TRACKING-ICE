@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { paint } from './lib/layout.svelte'
+  import { box, paint } from './lib/layout.svelte'
   import { t as txt, s } from './lib/text.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
   import {
     IDENTITY,
     ZOOM_MIN,
@@ -33,6 +34,15 @@
   let img = $state<HTMLImageElement | null>(null)
   let t = $state<CropTransform>(IDENTITY)
   let frame = $state({ w: 0, h: 0 })
+
+  const ArtComp = $derived(renderFor(path))
+  const artProps = $derived(propsFor(path))
+  const FrameComp = $derived(renderFor(`${path}.frame`))
+  const frameProps = $derived(propsFor(`${path}.frame`))
+  const CancelComp = $derived(renderFor(`${path}.cancel`))
+  const cancelProps = $derived(propsFor(`${path}.cancel`))
+  const ConfirmComp = $derived(renderFor(`${path}.confirm`))
+  const confirmProps = $derived(propsFor(`${path}.confirm`))
 
   const pointers = new Map<number, { x: number; y: number }>()
   let prev: { x1: number; y1: number; x2: number; y2: number } | null = null
@@ -146,9 +156,12 @@
 
 <!-- Root placeholder: a 1:1 square that follows the viewport. -->
 <div class="frame-cropper" style={paint(path)}>
+  {#if ArtComp}
+    <div class="crop-art"><ArtComp {...artProps} /></div>
+  {/if}
   <!-- Child placeholder: the 3:4 crop frame. -->
-  <div class="crop-area">
-    <div class="crop-frame">
+  <div class="crop-area" style={box(`${path}.frame`)}>
+    <div class="crop-frame" style={paint(`${path}.frame`)}>
       <canvas
         class="crop-surface"
         bind:this={canvas}
@@ -159,32 +172,48 @@
         onpointercancel={onUp}
         onpointerleave={onUp}
       ></canvas>
+      {#if FrameComp}
+        <div class="frame-art"><FrameComp {...frameProps} /></div>
+      {/if}
     </div>
   </div>
 
-  <div class="crop-actions">
-    <button type="button" class="crop-cancel" style={s('crop.button')} onclick={onCancel}>{txt('crop.cancel')}</button>
-    <button type="button" class="crop-ok" style={s('crop.button')} onclick={() => onOk(quantize(t))}>{txt('crop.confirm')}</button>
-  </div>
+  {#if CancelComp}
+    <div class="crop-slot" style={box(`${path}.cancel`)}>
+      <CancelComp {...cancelProps} label={txt(`${path}.cancel`)} textStyle={s(`${path}.button`)} onClick={onCancel} />
+    </div>
+  {/if}
+  {#if ConfirmComp}
+    <div class="crop-slot" style={box(`${path}.confirm`)}>
+      <ConfirmComp {...confirmProps} label={txt(`${path}.confirm`)} textStyle={s(`${path}.button`)} onClick={() => onOk(quantize(t))} />
+    </div>
+  {/if}
 </div>
 
 <style>
   .frame-cropper {
+    position: relative;
     width: min(100cqw, 100cqh);
     aspect-ratio: 1;
     container-type: size;
     box-sizing: border-box;
     display: grid;
-    grid-template-rows: 1fr auto;
-    gap: 4%;
     padding: 5%;
-    background: #0d1420;
-    outline: 0.5cqi solid #c084fc;
+    background: var(--fill);
+    outline: 0.5cqi solid var(--line);
     outline-offset: -0.5cqi;
   }
 
+  .crop-art {
+    position: absolute;
+    inset: 0%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
   .crop-area {
-    position: relative;
+    position: absolute;
+    z-index: 1;
     container-type: size;
     min-height: 0;
     display: grid;
@@ -197,7 +226,7 @@
     aspect-ratio: 3 / 4;
     overflow: hidden;
     background: #0f172a;
-    outline: 0.5cqi solid #fb923c;
+    outline: 0.5cqi solid var(--line);
     outline-offset: -0.5cqi;
   }
 
@@ -216,31 +245,15 @@
     cursor: grabbing;
   }
 
-  .crop-actions {
-    display: flex;
-    gap: 5%;
-    width: 100%;
+  /* The 512x512 dialog frame stretched over the 3:4 box, above the photo. */
+  .frame-art {
+    position: absolute;
+    inset: 0%;
+    z-index: 2;
+    pointer-events: none;
   }
 
-  .crop-actions button {
-    flex: 1;
-    border: 0;
-    padding: 3% 0;
-    font: inherit;
-    cursor: pointer;
-    background: #243047;
-    color: #e2e8f0;
-  }
-
-  .crop-ok {
-    box-shadow: inset 0 0 0 0.35cqi #fb923c;
-  }
-
-  .crop-cancel {
-    box-shadow: inset 0 0 0 0.35cqi #64748b;
-  }
-
-  .crop-actions button:focus-visible {
-    outline: 0.4cqi solid #f8fafc;
+  .crop-slot {
+    position: absolute;
   }
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { t, s } from './lib/text.svelte'
+  import { renderFor, propsFor } from './lib/content.svelte'
+  import { t } from './lib/text.svelte'
 
   let {
     path = '',
@@ -12,17 +13,27 @@
     path?: string
     onDigit?: (digit: string) => void
     onDelete?: () => void
-    onClear?: (event?: Event) => void
+    onClear?: () => void
     onConfirm?: () => void
     confirmDisabled?: boolean
   } = $props()
 
   const digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
+  // Which component draws a key, and with which three sprites, is content.json's
+  // call: nominal.pad.key / .clear / .ok.
+  const KeyComp = $derived(renderFor(`${path}.key`))
+  const keyProps = $derived(propsFor(`${path}.key`))
+  const ClearComp = $derived(renderFor(`${path}.clear`))
+  const clearProps = $derived(propsFor(`${path}.clear`))
+  const OkComp = $derived(renderFor(`${path}.ok`))
+  const okProps = $derived(propsFor(`${path}.ok`))
+
   let holdTimer: ReturnType<typeof setTimeout> | null = null
   let didHold = false
 
-  function startHold() {
+  function startHold(event?: PointerEvent) {
+    event?.preventDefault()
     didHold = false
     holdTimer = setTimeout(() => {
       didHold = true
@@ -48,23 +59,30 @@
 
 <section class="number-pad" aria-label="Papan angka">
   {#each digits as digit (digit)}
-    <button type="button" style={s(`${path}.key`)} onclick={() => onDigit(digit)}>{digit}</button>
+    {#if KeyComp}
+      <KeyComp {...keyProps} textPath={`${path}.key`} label={digit} onClick={() => onDigit(digit)} />
+    {/if}
   {/each}
 
-  <button
-    type="button"
-    class="pad-fn"
-    aria-label="Ketuk untuk hapus satu angka, tahan untuk hapus semua"
-    style={s(`${path}.key`)}
-    onpointerdown={(event) => { event.preventDefault(); startHold() }}
-    onpointerup={endHold}
-    onpointerleave={cancelHold}
-    onpointercancel={cancelHold}
-  >{t(`${path}.clear`)}</button>
+  {#if ClearComp}
+    <ClearComp
+      {...clearProps}
+      textPath={`${path}.clear`}
+      label={t(`${path}.clear`)}
+      ariaLabel="Ketuk untuk hapus satu angka, tahan untuk hapus semua"
+      onPressStart={startHold}
+      onPressEnd={endHold}
+      onPressCancel={cancelHold}
+    />
+  {/if}
 
-  <button type="button" style={s(`${path}.key`)} onclick={() => onDigit('0')}>0</button>
+  {#if KeyComp}
+    <KeyComp {...keyProps} textPath={`${path}.key`} label="0" onClick={() => onDigit('0')} />
+  {/if}
 
-  <button type="button" class="pad-ok" style={s(`${path}.ok`)} disabled={confirmDisabled} onclick={onConfirm}>{t(`${path}.ok`)}</button>
+  {#if OkComp}
+    <OkComp {...okProps} textPath={`${path}.ok`} label={t(`${path}.ok`)} disabled={confirmDisabled} onClick={onConfirm} />
+  {/if}
 </section>
 
 <style>
@@ -76,51 +94,5 @@
     gap: 3%;
     width: 100%;
     height: 100%;
-  }
-
-  button {
-    min-width: 0;
-    border: 0;
-    padding: 0;
-    background: #172e29;
-    color: #e2e8f0;
-    box-shadow: inset 0 0 0 0.25cqi #4c9981;
-    font: inherit;
-    cursor: pointer;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  button.pad-fn {
-    background: #2a2130;
-    box-shadow: inset 0 0 0 0.25cqi #a78bfa;
-  }
-
-  button.pad-ok {
-    background: #142736;
-    box-shadow: inset 0 0 0 0.35cqi #67e8f9;
-  }
-
-  button:active {
-    background: #285447;
-  }
-
-  button.pad-fn:active {
-    background: #3d2f47;
-  }
-
-  button.pad-ok:active {
-    background: #1d3a4f;
-  }
-
-  button.pad-ok:disabled {
-    opacity: 0.4;
-    cursor: default;
-    background: #142736;
-  }
-
-  button:focus-visible {
-    outline: 0.4cqi solid #f8fafc;
-    outline-offset: -0.4cqi;
   }
 </style>
