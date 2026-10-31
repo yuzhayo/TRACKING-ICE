@@ -29,6 +29,10 @@
   let uploadCropPreview = $state('')
   let outletManual = $state(false)
 
+  $effect(() => {
+    document.body.dataset.q1Answered = (currentQuestion > 1) ? '1' : '0';
+  })
+
   let cfg = $state(null)
   let submitting = $state(false)
   let resultOpen = $state(false)
