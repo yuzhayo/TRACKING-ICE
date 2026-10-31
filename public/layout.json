@@ -703,7 +703,7 @@
         "top": 30,
         "left": 6.6667,
         "width": 40,
-        "height": 35,
+        "height": 60,
         "z": 1,
         "outline": {
           "on": true,
@@ -720,7 +720,7 @@
         "top": 30,
         "left": 53.3333,
         "width": 40,
-        "height": 35,
+        "height": 60,
         "z": 1,
         "outline": {
           "on": true,
