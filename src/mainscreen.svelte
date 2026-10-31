@@ -384,7 +384,7 @@
   <SendResultPopup open={resultOpen} state={resultState} message={resultMsg} onClose={() => resultOpen = false} />
 
   {#if InfoComp}
-    <InfoComp {...infoProps} hidden={currentQuestion > 1} />
+    <InfoComp {...infoProps} hidden={true} />
   {/if}
 </section>
 
