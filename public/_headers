@@ -1,0 +1,23 @@
+# HTML: always revalidate (force UI updates)
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Layout/text/content JSON: never aggressively cache; update within 5 minutes
+/*.json
+  Cache-Control: no-cache, must-revalidate
+  Vary: Accept-Encoding
+
+# Vite hashed static assets: immutable for 1 year (hash changes => new URL -> cache naturally skipped)
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Public raster/sprites under dist root: cache 1 day, then revalidate
+/*.png
+  Cache-Control: public, max-age=86400, must-revalidate
+  Vary: Accept-Encoding
+
+# Fallback SPA redirect (also in _redirects)
+/* 
+  Cache-Control: public, max-age=0, must-revalidate
