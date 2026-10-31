@@ -10,7 +10,7 @@
     },
     "prompt": {
       "ba": "SELECT NAME",
-      "outlet": "SELECT OUTLET"
+      "outlet": "PILIH OUTLET"
     },
     "confirm": {
       "fontSize": "4cqi",
@@ -71,7 +71,7 @@
       "fontSize": "min(5cqi, 35cqb)",
       "fontWeight": "700",
       "align": "center",
-      "prompt": "Masukkan nominal"
+      "prompt": "MASUKAN NOMINAL"
     },
     "pad": {
       "key": {
@@ -96,7 +96,7 @@
     "align": "center",
     "pick": "PILIH FOTO",
     "change": "UBAH CROP",
-    "loading": "MEMUAT..."
+    "loading": "LOADING..."
   },
   "crop": {
     "button": {
@@ -109,7 +109,7 @@
       "fontSize": "min(5cqi, 5cqb)",
       "align": "center"
     },
-    "pickPrompt": "Pilih foto nota dari galeri.",
+    "pickPrompt": "PILIH FOTO NOTA DARI GALLERY.",
     "pickBtn": "Pilih Foto"
   },
   "action": {
@@ -170,7 +170,19 @@
     "crop": {
       "fontSize": "min(6cqi, 6cqb)",
       "align": "center",
-      "text": "crop nota dengan jelas di dalam frame"
+      "text": "ZOOM DAN CROP NOTA DENGAN JELAS DI DALAM FRAME"
+    }
+  },
+  "actionPreview": {
+    "reset": {
+      "fontSize": "8qi",
+      "align": "center",
+      "text": "RESET"
+    },
+    "confirm": {
+      "fontSize": "8cqi",
+      "align": "center",
+      "text": "CONFIRM"
     }
   }
 }

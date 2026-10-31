@@ -73,7 +73,6 @@
     "src": "/utx_base_footer_menu_active_semicircle.png",
     "fit": "stretch",
     "scale": 100
-
   },
   "wheel.list": {
     "render": "image",
@@ -128,7 +127,6 @@
   },
   "nominal.trigger": {
     "render": "pil"
-
   },
   "nominal.display": {
     "render": "image",
@@ -176,6 +174,18 @@
     "render": "btn"
   },
   "action.confirm": {
+    "render": "btn"
+  },
+  "actionPreview": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "actionPreview.reset": {
+    "render": "btn"
+  },
+  "actionPreview.confirm": {
     "render": "btn"
   },
   "warn": {

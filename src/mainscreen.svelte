@@ -322,7 +322,7 @@
   />
 
   <ActionPlaceholder
-    path="action"
+    path={uploadCrop ? 'actionPreview' : 'action'}
     hidden={actionHidden}
     in={actionIn}
     out={actionOut}
