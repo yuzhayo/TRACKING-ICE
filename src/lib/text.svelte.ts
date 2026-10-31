@@ -17,6 +17,8 @@
    dropped string shows up on screen instead of silently using old code text.
 */
 
+import { cqToVars } from './cq-units'
+
 type TextNode = string | { text?: string; fontSize?: string; fontWeight?: string; align?: string; [k: string]: unknown }
 type TextTree = Record<string, TextNode>
 
@@ -84,7 +86,7 @@ export function s(path: string): string {
     return ''
   }
   const parts: string[] = []
-  if (node.fontSize) parts.push(`font-size: ${node.fontSize}`)
+  if (node.fontSize) parts.push(`font-size: ${cqToVars(node.fontSize)}`)
   if (node.fontWeight) parts.push(`font-weight: ${node.fontWeight}`)
   if (node.align) parts.push(`text-align: ${node.align}`)
   return parts.join('; ') + ';'

@@ -5,6 +5,23 @@
   let pullY = $state(0);
   let refreshing = $state(false);
 
+  // Pull-to-refresh only starts from a touch inside the top part of the screen.
+  // Everything below (Q1/Q2 wheels, pads, crop surface) keeps its own gestures.
+  const REFRESH_ZONE = 0.25; // fraction of the viewport height, from the top
+  const REFRESH_BLOCK = '.option-list, .frame-cropper, input, textarea, select';
+
+  // True when the touch began on something that handles its own swipe.
+  function ownsGesture(el) {
+    if (!el || !el.closest) return false;
+    if (el.closest(REFRESH_BLOCK)) return true;
+    for (let n = el; n && n !== document.body; n = n.parentElement) {
+      const cs = getComputedStyle(n);
+      if (cs.touchAction === 'none') return true;
+      if ((cs.overflowY === 'auto' || cs.overflowY === 'scroll') && n.scrollHeight > n.clientHeight) return true;
+    }
+    return false;
+  }
+
   onMount(() => {
     let startY = 0;
     let tracking = false;
@@ -15,8 +32,10 @@
     }
 
     function start(e) {
-      if (window.scrollY === 0 && e.touches && e.touches.length === 1) {
-        startY = e.touches[0].clientY;
+      const y = e.touches && e.touches.length === 1 ? e.touches[0].clientY : -1;
+      const inZone = y >= 0 && y <= window.innerHeight * REFRESH_ZONE;
+      if (window.scrollY === 0 && inZone && !ownsGesture(e.target)) {
+        startY = y;
         tracking = true;
       } else {
         tracking = false;

@@ -1,6 +1,7 @@
 import { mount } from 'svelte'
 import './app.css'
 import App from './app.svelte'
+import { installCqPolyfill } from './lib/cq-polyfill'
 
 const target = document.getElementById('app')
 
@@ -9,3 +10,4 @@ if (!target) {
 }
 
 mount(App, { target })
+installCqPolyfill()
