@@ -109,7 +109,6 @@ import OutletManualPlaceholder from './outlet-manual-placeholder.svelte'
     }
   })
 
-  const showWheel = $derived(currentQuestion === 1 || currentQuestion === 2)
   const showCalendar = $derived(currentQuestion === 3)
   const showNominal = $derived(currentQuestion === 4)
   const showUpload = $derived(currentQuestion === 5)
@@ -118,16 +117,16 @@ import OutletManualPlaceholder from './outlet-manual-placeholder.svelte'
 
   const dateFmt = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
 
-  // Q1 = the BA list; Q2 = the outlets of the BA chosen in Q1.
-  const currentWheelOptions = $derived(
-    currentQuestion === 1
-      ? baList
-      : [...(outletsByBa[answers[0]] || []), 'INPUT MANUAL']
-  )
+  // One wheel per question, each with its own list and its own prompt. Q1 = the
+  // BA names; Q2 = the outlets of the BA chosen in Q1. They never share a list
+  // node, so a closing wheel cannot repaint with the next question's rows.
+  const baOptions = $derived(baList)
+  const outletOptions = $derived([...(outletsByBa[answers[0]] || []), 'INPUT MANUAL'])
   const allOutlets = $derived(
     [...new Set(Object.values(outletsByBa).flat())].sort()
   )
-  const wheelPrompt = $derived(currentQuestion === 1 ? t('wheel.prompt.ba') : t('wheel.prompt.outlet'))
+  const baPrompt = $derived(t('wheel.prompt.ba'))
+  const outletPrompt = $derived(t('wheel.prompt.outlet'))
 
   // mainscreen is itself a placeholder: content.json decides what enters it
   // (the background image), and it still holds its child placeholders.
@@ -337,13 +336,28 @@ import OutletManualPlaceholder from './outlet-manual-placeholder.svelte'
   <NominalPlaceholder path="nominal" hidden={!showNominal} {expanded} value={nominalDigits} max={cfg ? cfg.limits.nominalMax : 15000} onConfirm={answerNominal} onExpandedChange={handleExpanded} />
   <UploadPlaceholder path="upload" hidden={!showUpload} {expanded} photo={uploadPhoto} crop={uploadCrop} onPhoto={acceptPhoto} onCrop={setUploadCrop} onConfirm={answerUpload} onExpandedChange={handleExpanded} />
 
+  <!-- Two independent wheels. Each owns its list, its highlight and its open
+       state. Confirming Q1 hides Q1's wheel outright instead of swapping the
+       next question's rows into a list that is still being painted by the
+       collapse, so the two texts can never occupy the centre line together. -->
   <WheelPlaceholder
     path="wheel"
-    hidden={!showWheel || showOutletManual}
-    open={expanded}
-    options={currentWheelOptions}
-    prompt={wheelPrompt}
-    selected={answers[currentQuestion - 1]}
+    hidden={currentQuestion !== 1 || showOutletManual}
+    open={expanded && currentQuestion === 1}
+    options={baOptions}
+    prompt={baPrompt}
+    selected={answers[0]}
+    onCenterClick={expand}
+    onConfirm={answerWheel}
+  />
+
+  <WheelPlaceholder
+    path="wheel"
+    hidden={currentQuestion !== 2 || showOutletManual}
+    open={expanded && currentQuestion === 2}
+    options={outletOptions}
+    prompt={outletPrompt}
+    selected={answers[1]}
     onCenterClick={expand}
     onConfirm={answerWheel}
   />

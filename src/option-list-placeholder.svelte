@@ -24,8 +24,11 @@
   let collapsing = $state(false)
   let prevOpen = $state(false)
 
+  // Copy the set while the wheel is open only. On close this effect runs before
+  // the one below sets `collapsing`, so keying off that flag copied the next
+  // question's options into a list that was still painted by the collapse.
   $effect(() => {
-    if (open || !collapsing) {
+    if (open) {
       displayOptions = [...options]
     }
   })
@@ -164,6 +167,13 @@
   }
 
   .option-item.active {
+    color: transparent;
+  }
+
+  /* The band collapses for 300ms after confirm, and the centre row is already
+     showing the next prompt. Any item text still inside the closing band lands
+     on top of it. During collapse the list contributes geometry only. */
+  .option-list.collapsing .option-item {
     color: transparent;
   }
 </style>
