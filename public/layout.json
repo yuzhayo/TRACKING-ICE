@@ -260,6 +260,76 @@
       }
     }
   },
+  "outletManual": {
+    "top": 54,
+    "left": 10,
+    "width": 80,
+    "height": 44,
+    "z": 20,
+    "outline": {
+      "on": true,
+      "color": "#a78bfa",
+      "opacity": 0
+    },
+    "placeholder": {
+      "on": true,
+      "color": "#1e1433",
+      "opacity": 0
+    },
+    "children": {
+      "input": {
+        "top": 0,
+        "left": 0,
+        "width": 100,
+        "height": 12,
+        "z": 2,
+        "outline": {
+          "on": true,
+          "color": "#c4b5fd",
+          "opacity": 0
+        },
+        "placeholder": {
+          "on": true,
+          "color": "#1e1433",
+          "opacity": 0
+        }
+      },
+      "list": {
+        "top": 14,
+        "left": 0,
+        "width": 100,
+        "height": 72,
+        "z": 1,
+        "outline": {
+          "on": true,
+          "color": "#c4b5fd",
+          "opacity": 0
+        },
+        "placeholder": {
+          "on": true,
+          "color": "#1e1433",
+          "opacity": 0
+        }
+      },
+      "confirm": {
+        "top": 88,
+        "left": 30,
+        "width": 40,
+        "height": 10,
+        "z": 3,
+        "outline": {
+          "on": true,
+          "color": "#c4b5fd",
+          "opacity": 0
+        },
+        "placeholder": {
+          "on": true,
+          "color": "#1e1433",
+          "opacity": 0
+        }
+      }
+    }
+  },
   "calendar": {
     "top": 54,
     "left": 10,

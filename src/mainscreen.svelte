@@ -5,6 +5,7 @@
   import CalendarPlaceholder from './calendar-placeholder.svelte'
   import NominalPlaceholder from './nominal-placeholder.svelte'
   import UploadPlaceholder from './upload-placeholder.svelte'
+import OutletManualPlaceholder from './outlet-manual-placeholder.svelte'
   import SendResultPopup from './send-result-popup.svelte'
   import { cropDataUrl, loadImg } from './lib/crop'
   import { loadConfig, readOptionsCache, fetchOptions, submitAnswer } from './lib/api'
@@ -26,6 +27,7 @@
   let uploadPhotoBase64 = $state('')
   let uploadCrop = $state(null)
   let uploadCropPreview = $state('')
+  let outletManual = $state(false)
 
   let cfg = $state(null)
   let submitting = $state(false)
@@ -111,13 +113,19 @@
   const showCalendar = $derived(currentQuestion === 3)
   const showNominal = $derived(currentQuestion === 4)
   const showUpload = $derived(currentQuestion === 5)
+  const showOutletManual = $derived(currentQuestion === 2 && outletManual)
   const allAnswered = $derived(answers.every((a) => a !== ''))
 
   const dateFmt = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
 
   // Q1 = the BA list; Q2 = the outlets of the BA chosen in Q1.
   const currentWheelOptions = $derived(
-    currentQuestion === 1 ? baList : (outletsByBa[answers[0]] || [])
+    currentQuestion === 1
+      ? baList
+      : [...(outletsByBa[answers[0]] || []), 'INPUT MANUAL']
+  )
+  const allOutlets = $derived(
+    [...new Set(Object.values(outletsByBa).flat())].sort()
   )
   const wheelPrompt = $derived(currentQuestion === 1 ? t('wheel.prompt.ba') : t('wheel.prompt.outlet'))
 
@@ -173,6 +181,7 @@
   // reopened control shows blank instead of a stale pick.
   function clearAnswer(i) {
     answers[i] = ''
+    if (i === 1) outletManual = false
     if (i === 2) dateKey = ''
     if (i === 3) nominalDigits = ''
     if (i === 4) {
@@ -191,6 +200,12 @@
   }
 
   function answerWheel(optionLabel) {
+    if (currentQuestion === 2 && optionLabel === 'INPUT MANUAL') {
+      outletManual = true
+      expand()
+      return
+    }
+    if (currentQuestion === 2) outletManual = false
     const n = currentQuestion
     commit(n, () => { answers[n - 1] = optionLabel })
   }
@@ -199,6 +214,16 @@
     commit(3, () => {
       dateKey = key
       answers[2] = dateFmt.format(new Date(Number(key.slice(0, 4)), Number(key.slice(5, 7)) - 1, Number(key.slice(8, 10))))
+    })
+  }
+
+  function answerOutletManual(value) {
+    // Keep outletManual === true after commit so buildPayload sends this value
+    // as outletBaru (new input), not as a registered outlet (which would be
+    // rejected by the server as "outlet tidak terdaftar").
+    outletManual = true
+    commit(2, () => {
+      answers[1] = value
     })
   }
 
@@ -221,8 +246,8 @@
   function buildPayload() {
     return {
       nama: answers[0],
-      outlet: answers[1],
-      outletBaru: '',
+      outlet: outletManual ? '' : answers[1],
+      outletBaru: outletManual ? answers[1] : '',
       tanggal: dateKey,
       nominal: nominalDigits,
       fotoBase64: uploadPhotoBase64,
@@ -268,6 +293,7 @@
     uploadPhotoBase64 = ''
     uploadCrop = null
     uploadCropPreview = ''
+    outletManual = false
     currentQuestion = 1
     collapse()
   }
@@ -307,12 +333,13 @@
   />
 
   <CalendarPlaceholder path="calendar" hidden={!showCalendar} {expanded} value={dateKey} onSelect={answerDate} onExpandedChange={handleExpanded} />
+  <OutletManualPlaceholder path="outletManual" hidden={!showOutletManual} open={expanded} options={allOutlets} onConfirm={answerOutletManual} onCancel={() => { outletManual = false; collapse() }} />
   <NominalPlaceholder path="nominal" hidden={!showNominal} {expanded} value={nominalDigits} max={cfg ? cfg.limits.nominalMax : 15000} onConfirm={answerNominal} onExpandedChange={handleExpanded} />
   <UploadPlaceholder path="upload" hidden={!showUpload} {expanded} photo={uploadPhoto} crop={uploadCrop} onPhoto={acceptPhoto} onCrop={setUploadCrop} onConfirm={answerUpload} onExpandedChange={handleExpanded} />
 
   <WheelPlaceholder
     path="wheel"
-    hidden={!showWheel}
+    hidden={!showWheel || showOutletManual}
     open={expanded}
     options={currentWheelOptions}
     prompt={wheelPrompt}

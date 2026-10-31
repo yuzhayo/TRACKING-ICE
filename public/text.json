@@ -184,5 +184,23 @@
       "align": "center",
       "text": "CONFIRM"
     }
+  },
+  "outletManual": {
+    "input": {
+      "fontSize": "min(4cqi, 6cqb)",
+      "align": "center",
+      "prompt": "CARI/INPUT OUTLET",
+      "text": "CARI/INPUT OUTLET"
+    },
+    "list": {
+      "fontSize": "min(4cqi, 6cqb)",
+      "align": "left",
+      "prompt": "LIST"
+    },
+    "confirm": {
+      "fontSize": "8cqi",
+      "align": "center",
+      "text": "CONFIRM"
+    }
   }
 }

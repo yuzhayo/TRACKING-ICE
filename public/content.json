@@ -188,6 +188,24 @@
   "actionPreview.confirm": {
     "render": "btn"
   },
+  "outletManual": {
+    "render": "image",
+    "src": "/utx_base_dialog_bg.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "outletManual.input": {
+    "render": "pil"
+  },
+  "outletManual.list": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "outletManual.confirm": {
+    "render": "btn"
+  },
   "warn": {
     "render": "image",
     "src": "/dummy.png",
