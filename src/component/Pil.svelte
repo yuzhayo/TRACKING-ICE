@@ -12,7 +12,7 @@
      open = the wheel belonging to this pill is showing: the pill keeps its box,
      its contents stop being drawn (the wheel takes that exact place).
 
-     NOT wired to any placeholder - that mapping is the operator's call. */
+     Wired through content.json: any entry whose "render" is "pil" gets this component. */
 
   let {
     label = '',

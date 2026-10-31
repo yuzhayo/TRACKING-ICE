@@ -41,10 +41,6 @@ function writeCache(tree: TextTree): void {
 
 let tree = $state<TextTree>(readCache() ?? {})
 
-export function setText(next: TextTree): void {
-  tree = next
-}
-
 export async function loadText(): Promise<TextTree> {
   try {
     const res = await fetch('/text.json', { cache: 'no-store' })

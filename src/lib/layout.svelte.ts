@@ -54,10 +54,6 @@ function writeCache(tree: LayoutTree): void {
 // Seed from the last-fetched layout so the first paint already has geometry.
 let tree = $state<LayoutTree>(readCache() ?? {})
 
-export function setLayout(next: LayoutTree): void {
-  tree = next
-}
-
 export async function loadLayout(): Promise<LayoutTree> {
   try {
     const res = await fetch('/layout.json', { cache: 'no-store' })

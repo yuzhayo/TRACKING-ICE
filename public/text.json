@@ -11,22 +11,10 @@
     "prompt": {
       "ba": "SELECT NAME",
       "outlet": "PILIH OUTLET"
-    },
-    "confirm": {
-      "fontSize": "4cqi",
-      "align": "center"
     }
   },
   "temp": {
     "row": {
-      "fontSize": "3.5cqi",
-      "align": "center"
-    },
-    "rowIndex": {
-      "fontSize": "2.5cqi",
-      "align": "center"
-    },
-    "row5": {
       "fontSize": "3.5cqi",
       "align": "center"
     }
@@ -131,20 +119,6 @@
   "pil": {
     "fontSize": "4cqi",
     "align": "center"
-  },
-  "jawaban": {
-    "fontSize": "4cqi",
-    "align": "center"
-  },
-  "popup": {
-    "title": {
-      "fontSize": "min(5cqi, 5cqb)",
-      "align": "center"
-    },
-    "message": {
-      "fontSize": "min(4cqi, 4cqb)",
-      "align": "center"
-    }
   },
   "result": {
     "line": {

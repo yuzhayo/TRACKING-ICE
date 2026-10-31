@@ -5,7 +5,7 @@
   import CalendarPlaceholder from './calendar-placeholder.svelte'
   import NominalPlaceholder from './nominal-placeholder.svelte'
   import UploadPlaceholder from './upload-placeholder.svelte'
-import OutletManualPlaceholder from './outlet-manual-placeholder.svelte'
+  import OutletManualPlaceholder from './outlet-manual-placeholder.svelte'
   import SendResultPopup from './send-result-popup.svelte'
   import { cropDataUrl, loadImg } from './lib/crop'
   import { loadConfig, readOptionsCache, fetchOptions, submitAnswer } from './lib/api'

@@ -17,27 +17,14 @@
 import Btn from '../component/Btn.svelte'
 import Image from '../component/Image.svelte'
 import Pil from '../component/Pil.svelte'
-import PilJawaban from '../component/PilJawaban.svelte'
-import Popup from '../component/Popup.svelte'
-import PickerBtn from '../component/PickerBtn.svelte'
-import PickerGlow from '../component/PickerGlow.svelte'
 import PadKey from '../component/PadKey.svelte'
 
 /* The registry only makes a component REACHABLE by key. Which placeholder
-   renders which key is public/content.json's decision, and nothing is pointed
-   at these yet - the operator dictates that mapping.
-
-   picker_btn and picker_glow are the two pieces taken out of the old PWA wheel.
-   Each is a stack of sprites and draws ONE instance, so a placeholder above the
-   wheel and one below it are two placeholders, not one mirrored component. */
+   renders which key is public/content.json's decision. */
 const registry: Record<string, unknown> = {
   btn: Btn,
   image: Image,
   pil: Pil,
-  jawaban: PilJawaban,
-  popup: Popup,
-  picker_btn: PickerBtn,
-  picker_glow: PickerGlow,
   pad_key: PadKey
 }
 
@@ -64,10 +51,6 @@ function writeCache(doc: ContentDoc): void {
 }
 
 let doc = $state<ContentDoc>(readCache() ?? {})
-
-export function setContent(next: ContentDoc): void {
-  doc = next
-}
 
 export async function loadContent(): Promise<ContentDoc> {
   try {

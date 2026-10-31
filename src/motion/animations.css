@@ -166,17 +166,6 @@
 }
 
 
-/* ============================================================
-   SECTION 5C - ANSWER PILL SHINE
-   used by  src/component/PilJawaban.svelte
-   Same one-tap game flash as the button, on the pill's own effect canvas.
-   ============================================================ */
-
-@keyframes pil-kilat {
-  0%   { opacity: 0; }
-  25%  { opacity: 1; }
-  100% { opacity: 0; }
-}
 
 
 /* ============================================================
@@ -232,11 +221,6 @@
   }
 
   .btn.kilat .btn-kilat {
-    animation: none;
-    opacity: 0;
-  }
-
-  .pil-jawaban.kilat .pil-jawaban-kilat {
     animation: none;
     opacity: 0;
   }

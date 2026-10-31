@@ -7,7 +7,7 @@
      here. It fills whatever box its parent gives it (a placeholder later), so it
      carries no position of its own. The label is passed in; the text style comes
      from public/text.json key "btn" unless the caller overrides it.
-     NOT wired to any placeholder yet - that mapping is the operator's call. */
+     Wired through content.json: any entry whose "render" is "btn" gets this component. */
 
   let {
     label = '',

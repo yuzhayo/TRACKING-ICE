@@ -2,7 +2,6 @@
   import { box, paint } from './lib/layout.svelte'
   import { t, s } from './lib/text.svelte'
   import { renderFor, propsFor } from './lib/content.svelte'
-  import Pil from './component/Pil.svelte'
   import './motion/animations.css'
 
   let {
@@ -19,12 +18,8 @@
   const InputComp = $derived(renderFor(`${path}.input`))
   const inputProps = $derived(propsFor(`${path}.input`))
   const ConfirmComp = $derived(renderFor(`${path}.confirm`))
-  const confirmProps = $derived(propsFor(`${path}.confirm`))
 
   let draft = $state('')
-  let active = $state(0)
-  let listEl = $state(null)
-  let programmatic = false
 
   const filtered = $derived(
     draft.trim() === ''
@@ -35,7 +30,6 @@
   $effect(() => {
     if (open) {
       draft = ''
-      active = 0
       window.setTimeout(() => {
         const el = document.querySelector('.outlet-manual-input')
         if (el) el.focus()
@@ -59,24 +53,11 @@
     }
   }
 
-  function handleScroll() {
-    if (!listEl || programmatic) return
-    const rowH = listEl.clientHeight / 7
-    const i = Math.max(0, Math.min(filtered.length - 1, Math.round(listEl.scrollTop / rowH)))
-    if (i !== active) active = i
-  }
-
   function pick(i) {
     const v = filtered[i]
     if (v !== undefined) draft = v
   }
 
-  $effect(() => {
-    if (!listEl) return
-    const ro = new ResizeObserver(() => {})
-    ro.observe(listEl)
-    return () => ro.disconnect()
-  })
 </script>
 
 <section
@@ -112,14 +93,11 @@
   <div
     class="om-list"
     style={box(`${path}.list`) + paint(`${path}.list`)}
-    bind:this={listEl}
-    onscroll={handleScroll}
   >
     {#each filtered as item, i}
       <button
         type="button"
         class="om-row"
-        class:active={i === active}
         style={s(`${path}.list`)}
         onclick={() => pick(i)}
       >{item}</button>
