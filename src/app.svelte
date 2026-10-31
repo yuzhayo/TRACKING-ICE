@@ -1,9 +1,11 @@
 <script>
   import Mainscreen from './mainscreen.svelte'
+  import SettingsGear from './settings-gear.svelte'
 </script>
 
 <main class="app">
   <Mainscreen />
+  <SettingsGear />
 </main>
 
 <style>
