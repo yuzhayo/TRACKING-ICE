@@ -7,3 +7,15 @@ package-lock.json
 # Quarantined dead code (moved from live areas; out of the app, but recoverable from /UNUSED locally)
 UNUSED/
 
+# Cloudflare credentials. This repo is PUBLIC on GitHub, so anything committed
+# here is published to the world - never let a key get past this line.
+cloudflare-key.txt
+*.key
+*-key.txt
+.env
+.env.*
+
+
+# Netlify token - same reason: this repo is public
+NETLIFY_PERSONAL_ACCESS_TOKEN.txt
+.netlify/
