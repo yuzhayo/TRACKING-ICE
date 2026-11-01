@@ -100,7 +100,8 @@
   .crop-child {
     position: relative;
     width: min(100cqw, 75cqh);
-    aspect-ratio: 3 / 4;
+    /* Explicit height, not aspect-ratio (Safari 15+, Chrome 88+). 3 wide : 4 tall. */
+    height: calc(min(100cqw, 75cqh) * 1.33333);
     overflow: hidden;
     background: #0f172a;
     outline: 0.5cqi solid var(--line);

@@ -33,11 +33,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4%;
     text-align: center;
     container-type: size;
   }
 
+  /* Margins, not flex gap: gap in a flex container is Chrome 84+ / Safari 14.1+.
+     cqh keeps the measure the old percentage gap had - 4% of this box's height. */
   .result-line {
     margin: 0;
     font-weight: 800;
@@ -53,7 +54,7 @@
   }
 
   .result-detail {
-    margin: 0;
+    margin: 4cqh 0 0;
     color: #cbd5e1;
     word-break: break-word;
   }

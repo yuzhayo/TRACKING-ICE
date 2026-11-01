@@ -28,6 +28,20 @@
 
     onOutEnd()
   }
+
+  // Whether the band finished moving is also timed. On a phone that runs no
+  // animation the event never arrives, and the caller's "if still moving"
+  // guards make the duplicate harmless.
+  $effect(() => {
+    const movingOut = out
+    const movingIn = enter
+    if (!movingOut && !movingIn) return
+    const timer = window.setTimeout(
+      () => (movingOut ? onOutEnd() : onInEnd()),
+      movingOut ? 320 : 470
+    )
+    return () => clearTimeout(timer)
+  })
 </script>
 
 <section

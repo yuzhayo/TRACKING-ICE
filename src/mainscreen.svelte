@@ -128,7 +128,9 @@
   const baOptions = $derived(baList)
   const outletOptions = $derived([...(outletsByBa[answers[0]] || []), 'INPUT MANUAL'])
   const allOutlets = $derived(
-    [...new Set(Object.values(outletsByBa).flat())].sort()
+    // concat-spread, not .flat(): Array.prototype.flat is Chrome 69+ and the
+    // build only transpiles syntax, so an older phone would throw here.
+    [...new Set([].concat(...Object.values(outletsByBa)))].sort()
   )
   const baPrompt = $derived(t('wheel.prompt.ba'))
   const outletPrompt = $derived(t('wheel.prompt.outlet'))

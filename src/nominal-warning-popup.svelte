@@ -13,7 +13,9 @@
   } = $props()
 
   const fmt = new Intl.NumberFormat('id-ID')
-  const label = $derived(t('warn.nominal').replaceAll('{max}', fmt.format(max)))
+  // split/join, not replaceAll: String.prototype.replaceAll is Chrome 85+ and
+  // crashes the older phones this app has to open on.
+  const label = $derived(t('warn.nominal').split('{max}').join(fmt.format(max)))
 </script>
 
 <PopupPlaceholder path="warn" {open} {onClose}>

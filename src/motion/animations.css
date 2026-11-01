@@ -60,26 +60,22 @@
 /* ============================================================
    SECTION 2 - OPTION LIST  (carousel reveal / collapse)
    used by  src/option-list-placeholder.svelte
-   The list opens from the center line and closes back to it.
-   Independent of the wheel rows above.
+   The band opens from the centre line and closes back to it.
+
+   A transition, not a keyframe: the closed pose is the resting style and the
+   open class carries the open pose, so a phone that never animates still shows
+   the right thing in both states. The old version left visibility itself to an
+   animation's fill - clip-path: inset(50%) until the keyframe ran - and an
+   engine that did not animate showed no list at all.
    ============================================================ */
 
-.option-list.revealing {
-  animation: wheel-clip-reveal 450ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+.wheel-reveal {
+  transition: transform 300ms ease-in;
 }
 
-.option-list.collapsing {
-  animation: wheel-clip-collapse 300ms ease-in forwards;
-}
-
-@keyframes wheel-clip-reveal {
-  from { clip-path: inset(50% 0% 50% 0%); }
-  to   { clip-path: inset(0% 0% 0% 0%); }
-}
-
-@keyframes wheel-clip-collapse {
-  from { clip-path: inset(0% 0% 0% 0%); }
-  to   { clip-path: inset(50% 0% 50% 0%); }
+.option-list.revealing .wheel-reveal {
+  transform: scaleY(1);
+  transition: transform 450ms cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 
@@ -187,14 +183,9 @@
     opacity: 0;
   }
 
-  .option-list.revealing {
-    animation: none;
-    clip-path: inset(0% 0% 0% 0%);
-  }
-
-  .option-list.collapsing {
-    animation: none;
-    clip-path: inset(50% 0% 50% 0%);
+  .wheel-reveal,
+  .option-list.revealing .wheel-reveal {
+    transition: none;
   }
 
   .wheel-row-text {

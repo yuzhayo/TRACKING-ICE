@@ -36,6 +36,7 @@
   {disabled}
   onclick={onClick}
   onpointerdown={flash}
+  ontouchstart={flash}
   onanimationend={handleAnimationEnd}
 >
   <span class="btn-dasar" aria-hidden="true"></span>

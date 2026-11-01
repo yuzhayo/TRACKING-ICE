@@ -209,7 +209,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5cqh;
     text-align: center;
     color: #cbd5e1;
   }
@@ -218,7 +217,9 @@
     margin: 0;
   }
 
+  /* Margin, not flex gap - gap in a flex container is Chrome 84+ / Safari 14.1+. */
   .crop-pick button {
+    margin-top: 5cqh;
     border: 0;
     padding: 2cqh 8cqw;
     background: #243047;

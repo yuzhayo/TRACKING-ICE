@@ -27,10 +27,35 @@
     ariaLabel?: string
     disabled?: boolean
     onClick?: () => void
-    onPressStart?: () => void
+    onPressStart?: (event?: PointerEvent | TouchEvent) => void
     onPressEnd?: () => void
     onPressCancel?: () => void
   } = $props()
+
+  /* The hold-to-clear behaviour is driven from here, not from CSS, so a browser
+     without pointer events still has to get a press. Whichever family arrives
+     first owns the key for the rest of the session, so nothing fires twice. */
+  let pointerSeen = false
+
+  function down(event: PointerEvent) {
+    pointerSeen = true
+    onPressStart(event)
+  }
+
+  function touchDown(event: TouchEvent) {
+    if (pointerSeen) return
+    onPressStart(event)
+  }
+
+  function touchEnd() {
+    if (pointerSeen) return
+    onPressEnd()
+  }
+
+  function touchCancel() {
+    if (pointerSeen) return
+    onPressCancel()
+  }
 </script>
 
 <button
@@ -39,10 +64,13 @@
   {disabled}
   aria-label={ariaLabel}
   style={s(textPath)}
-  onpointerdown={onPressStart}
+  onpointerdown={down}
   onpointerup={onPressEnd}
   onpointerleave={onPressCancel}
   onpointercancel={onPressCancel}
+  ontouchstart={touchDown}
+  ontouchend={touchEnd}
+  ontouchcancel={touchCancel}
   onclick={onClick}
 >
   <span class="pad-base" style={`background-image: url("${base}")`} aria-hidden="true"></span>

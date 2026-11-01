@@ -172,7 +172,10 @@
   }
   .circleBtn {
     width: 48%;
-    aspect-ratio: 1 / 1;
+    /* Padding resolves against the containing block's width, so this is a square
+       without aspect-ratio (Safari 15+, Chrome 88+). */
+    height: 0;
+    padding-bottom: 48%;
     border: none;
     margin: 2%;
     background-size: 100% 100%;

@@ -44,7 +44,12 @@
   const ConfirmComp = $derived(renderFor(`${path}.confirm`))
   const confirmProps = $derived(propsFor(`${path}.confirm`))
 
-  const pointers = new Map<number, { x: number; y: number }>()
+  // Both input paths land in the same map. Pointer events are the modern one;
+  // touch events are the fallback for browsers (iOS 12 and older) that have no
+  // pointer events at all, so the crop would otherwise be dead there. The first
+  // pointer event seen wins, and the touch path stands down for that session.
+  const pointers = new Map<string, { x: number; y: number }>()
+  let pointerSeen = false
   let prev: { x1: number; y1: number; x2: number; y2: number } | null = null
 
   $effect(() => {
@@ -71,6 +76,12 @@
       if (w > 0 && h > 0) frame = { w, h }
     }
     measure()
+    // ResizeObserver is Chrome 64+ / Safari 13.1+. Below that the box still has
+    // to be tracked, or the crop surface stays at its first size after rotation.
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure)
+      return () => window.removeEventListener('resize', measure)
+    }
     const ro = new ResizeObserver(measure)
     ro.observe(el)
     return () => ro.disconnect()
@@ -92,38 +103,39 @@
     return { x1: pts[0].x, y1: pts[0].y, x2: pts[1].x, y2: pts[1].y }
   }
 
-  function onDown(event: PointerEvent) {
-    if (!img || !canvas) return
-    try {
-      canvas.setPointerCapture(event.pointerId)
-    } catch {
-      // capture only keeps events flowing when the finger leaves the element
-    }
-    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY })
+  function addPoint(id: string, x: number, y: number) {
+    pointers.set(id, { x, y })
     prev = pair()
   }
 
-  function onMove(event: PointerEvent) {
-    const last = pointers.get(event.pointerId)
-    if (!last || !img) return
-    const cur = { x: event.clientX, y: event.clientY }
-    const iw = img.naturalWidth
-    const ih = img.naturalHeight
+  function dropPoint(id: string) {
+    pointers.delete(id)
+    prev = pair()
+  }
 
-    if (pointers.size === 1) {
-      pointers.set(event.pointerId, cur)
-      t = clampPan(
-        { ...t, px: t.px + (cur.x - last.x) / frame.w, py: t.py + (cur.y - last.y) / frame.h },
-        iw, ih, frame.w, frame.h
-      )
+  // One point moving is a pan, applied per point so a two-finger drag pans from
+  // whichever finger reported last.
+  function movePoint(id: string, x: number, y: number) {
+    const last = pointers.get(id)
+    if (!last || !img) return
+    pointers.set(id, { x, y })
+    if (pointers.size !== 1) return
+    t = clampPan(
+      { ...t, px: t.px + (x - last.x) / frame.w, py: t.py + (y - last.y) / frame.h },
+      img.naturalWidth, img.naturalHeight, frame.w, frame.h
+    )
+  }
+
+  // Two points: rotate and pinch about the midpoint of the pair.
+  function applyPair() {
+    if (pointers.size < 2) {
+      prev = pair()
       return
     }
-
-    pointers.set(event.pointerId, cur)
     const g = pair()
     const p = prev
     prev = g
-    if (!g || !p) return
+    if (!g || !p || !img) return
 
     const v1x = p.x2 - p.x1
     const v1y = p.y2 - p.y1
@@ -144,13 +156,55 @@
         px: t.px + dmx / frame.w,
         py: t.py + dmy / frame.h
       },
-      iw, ih, frame.w, frame.h
+      img.naturalWidth, img.naturalHeight, frame.w, frame.h
     )
   }
 
+  function onDown(event: PointerEvent) {
+    if (!img || !canvas) return
+    pointerSeen = true
+    try {
+      canvas.setPointerCapture(event.pointerId)
+    } catch {
+      // capture only keeps events flowing when the finger leaves the element
+    }
+    addPoint(String(event.pointerId), event.clientX, event.clientY)
+  }
+
+  function onMove(event: PointerEvent) {
+    pointerSeen = true
+    movePoint(String(event.pointerId), event.clientX, event.clientY)
+    applyPair()
+  }
+
   function onUp(event: PointerEvent) {
-    pointers.delete(event.pointerId)
-    prev = pair()
+    dropPoint(String(event.pointerId))
+  }
+
+  function onTouchStart(event: TouchEvent) {
+    if (pointerSeen || !img) return
+    if (event.cancelable) event.preventDefault()
+    for (const touch of Array.from(event.changedTouches)) {
+      addPoint(`t${touch.identifier}`, touch.clientX, touch.clientY)
+    }
+  }
+
+  // A touch event can carry several fingers at once, so every point is written
+  // before the pair is compared - otherwise the second finger pans twice.
+  function onTouchMove(event: TouchEvent) {
+    if (pointerSeen) return
+    if (event.cancelable) event.preventDefault()
+    for (const touch of Array.from(event.changedTouches)) {
+      movePoint(`t${touch.identifier}`, touch.clientX, touch.clientY)
+    }
+    applyPair()
+  }
+
+  function onTouchEnd(event: TouchEvent) {
+    if (pointerSeen) return
+    for (const touch of Array.from(event.changedTouches)) {
+      dropPoint(`t${touch.identifier}`)
+    }
   }
 </script>
 
@@ -171,6 +225,10 @@
         onpointerup={onUp}
         onpointercancel={onUp}
         onpointerleave={onUp}
+        ontouchstart={onTouchStart}
+        ontouchmove={onTouchMove}
+        ontouchend={onTouchEnd}
+        ontouchcancel={onTouchEnd}
       ></canvas>
       {#if FrameComp}
         <div class="frame-art"><FrameComp {...frameProps} /></div>
@@ -194,7 +252,8 @@
   .frame-cropper {
     position: relative;
     width: min(100cqw, 100cqh);
-    aspect-ratio: 1;
+    /* Explicit square, not aspect-ratio (Safari 15+, Chrome 88+). */
+    height: min(100cqw, 100cqh);
     container-type: size;
     box-sizing: border-box;
     display: grid;
@@ -223,7 +282,8 @@
   .crop-frame {
     position: relative;
     height: min(100cqh, 133.333cqw);
-    aspect-ratio: 3 / 4;
+    /* Explicit width from the same measure, not aspect-ratio. 3 wide : 4 tall. */
+    width: calc(min(100cqh, 133.333cqw) * 0.75);
     overflow: hidden;
     background: #0f172a;
     outline: 0.5cqi solid var(--line);

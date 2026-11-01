@@ -32,7 +32,7 @@
   let holdTimer: ReturnType<typeof setTimeout> | null = null
   let didHold = false
 
-  function startHold(event?: PointerEvent) {
+  function startHold(event?: PointerEvent | TouchEvent) {
     event?.preventDefault()
     didHold = false
     holdTimer = setTimeout(() => {
