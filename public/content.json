@@ -218,6 +218,17 @@
     "fit": "stretch",
     "scale": 100
   },
+  "instr.crop": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "instr.video": {
+    "render": "video",
+    "src": "/media/crop-guide-v1.mp4",
+    "fit": "contain"
+  },
   "result": {
     "render": "image",
     "src": "/dummy.png",

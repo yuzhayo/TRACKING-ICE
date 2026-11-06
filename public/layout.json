@@ -820,6 +820,42 @@
       "on": false,
       "color": "#000000",
       "opacity": 0
+    },
+    "children": {
+      "crop": {
+        "top": 0,
+        "left": 0,
+        "width": 100,
+        "height": 18,
+        "z": 1,
+        "outline": {
+          "on": false,
+          "color": "#000000",
+          "opacity": 0
+        },
+        "placeholder": {
+          "on": false,
+          "color": "#000000",
+          "opacity": 0
+        }
+      },
+      "video": {
+        "top": 23,
+        "left": 0,
+        "width": 100,
+        "height": 77,
+        "z": 1,
+        "outline": {
+          "on": false,
+          "color": "#000000",
+          "opacity": 0
+        },
+        "placeholder": {
+          "on": false,
+          "color": "#000000",
+          "opacity": 0
+        }
+      }
     }
   },
   "result": {

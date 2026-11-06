@@ -145,6 +145,9 @@
       "fontSize": "min(6cqi, 6cqb)",
       "align": "center",
       "text": "ZOOM DAN CROP NOTA DENGAN JELAS DI DALAM FRAME"
+    },
+    "video": {
+      "text": "Contoh zoom dan crop nota"
     }
   },
   "actionPreview": {
