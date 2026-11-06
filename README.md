@@ -65,7 +65,7 @@ To move, restyle, reword or re-wire a box: edit the JSON, not the components.
 src/main.ts                 mount + polyfill bootstrap
 src/app.svelte              pull-to-refresh shell
 src/mainscreen.svelte       the screen: 5 answers, wheels, pads, popups
-src/component/              shared atoms: Btn, Image, Info, PadKey, Pil, Video
+src/component/              shared atoms: Btn, Image, PadKey, Pil, Video
 src/*-placeholder.svelte    the feature boxes (wheel, calendar, nominal, upload, crop...)
 src/lib/api.ts              the Apps Script contract (the only network code)
 src/lib/crop.ts             canvas crop + preview
@@ -109,12 +109,12 @@ timestamp). No user accounts, no cookies, no telemetry.
 - `public/manifest.webmanifest`: standalone, portrait, `ice.png` icons
 - `public/sw.js`: network-first fetch passthrough ("installability gate, no stale UI").
   As of 2026-11 the codebase never calls `serviceWorker.register` - the register call
-  was lost in the data-driven refactor of the info menu; the gear menu only
-  *unregisters*. Install therefore rides on Chrome's "Add to Home screen".
+  was lost in the data-driven refactor. Install therefore rides on Chrome's
+  "Add to Home screen".
 - `public/_headers`: HTML and JSON always revalidate; `/assets/*` (content-hashed)
   immutable for 1 year; PNG 1 day
 - `public/_redirects`: `/* -> /index.html 200` (SPA fallback)
-- Pull-to-refresh and the gear menu both wipe caches and unregister service workers
+- Pull-to-refresh wipes caches and unregisters service workers
 
 ## Deploy
 

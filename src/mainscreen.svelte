@@ -1,6 +1,5 @@
 <script>
   import WheelPlaceholder from './wheel-placeholder.svelte'
-  import Info from './component/Info.svelte'
   import ActionPlaceholder from './action-placeholder.svelte'
   import TempPlaceholder from './temp-placeholder.svelte'
   import CalendarPlaceholder from './calendar-placeholder.svelte'
@@ -139,8 +138,6 @@
   // (the background image), and it still holds its child placeholders.
   const BgComp = $derived(renderFor('mainscreen'))
   const bgProps = $derived(propsFor('mainscreen'))
-  const InfoComp = $derived(renderFor('info'))
-  const infoProps = $derived(propsFor('info'))
 
   let expanded = $state(false)
   let actionHidden = $state(false)
@@ -384,10 +381,6 @@
   />
 
   <SendResultPopup open={resultOpen} state={resultState} message={resultMsg} onClose={() => resultOpen = false} />
-
-  {#if InfoComp}
-    <InfoComp {...infoProps} hidden={true} />
-  {/if}
 </section>
 
 <style>

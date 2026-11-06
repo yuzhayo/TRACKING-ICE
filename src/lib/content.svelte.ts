@@ -18,7 +18,6 @@ import Btn from '../component/Btn.svelte'
 import Image from '../component/Image.svelte'
 import Pil from '../component/Pil.svelte'
 import PadKey from '../component/PadKey.svelte'
-import Info from '../component/Info.svelte'
 import Video from '../component/Video.svelte'
 
 /* The registry only makes a component REACHABLE by key. Which placeholder
@@ -28,7 +27,6 @@ const registry: Record<string, unknown> = {
   image: Image,
   pil: Pil,
   pad_key: PadKey,
-  info: Info,
   video: Video
 }
 

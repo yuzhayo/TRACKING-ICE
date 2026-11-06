@@ -875,14 +875,4 @@
       "opacity": 0
     }
   }
-,
-  "info": {
-    "top": 0,
-    "left": 100,
-    "width": 4,
-    "height": 6,
-    "z": 100,
-    "outline": { "on": false, "color": "#000000", "opacity": 0 },
-    "placeholder": { "on": false, "color": "#000000", "opacity": 0 }
-  }
 }
