@@ -82,15 +82,15 @@ REM  Reads the API token (line 9) and account ID (line 5) from cloudflare-key.tx
 REM  straight into env vars. Values are never printed.
 echo.
 echo [deploy] Cloudflare Pages: report-ice-cube (production, branch main)
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
+powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
   "$lines = Get-Content cloudflare-key.txt; $env:CLOUDFLARE_API_TOKEN = $lines[8].Trim(); $env:CLOUDFLARE_ACCOUNT_ID = $lines[4].Trim(); npx --yes wrangler pages deploy dist --project-name=report-ice-cube --branch=main"
 if errorlevel 1 (echo ERROR: deploy failed - see wrangler output above. & pause & exit /b 15)
 
 REM --- 6. verify the live domain serves THIS build ---------------------------
 echo.
 echo [verify] checking https://report-ice-cube.pages.dev/ serves the new asset hashes...
-powershell -NoProfile -ExecutionPolicy Bypass -Command ^
-  "$page = (Invoke-WebRequest -Uri 'https://report-ice-cube.pages.dev/' -TimeoutSec 30).Content; $rx = [regex] 'assets/index-[A-Za-z0-9_-]+\.(js|css)'; $live = ($rx.Matches($page) | ForEach-Object { $_.Value }) -join ', '; $local = ($rx.Matches((Get-Content dist\index.html -Raw)) | ForEach-Object { $_.Value }) -join ', '; Write-Host ('live  : ' + $live); Write-Host ('local : ' + $local); if ($live -eq $local) { Write-Host 'VERIFIED: production serves this build'; exit 0 } else { Write-Host 'MISMATCH: production does not (yet) serve this build'; exit 16 }"
+powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command ^
+  "$page = (Invoke-WebRequest -UseBasicParsing -Uri 'https://report-ice-cube.pages.dev/' -TimeoutSec 30).Content; $rx = [regex] 'assets/index-[A-Za-z0-9_-]+\.(js|css)'; $live = ($rx.Matches($page) | ForEach-Object { $_.Value }) -join ', '; $local = ($rx.Matches((Get-Content dist\index.html -Raw)) | ForEach-Object { $_.Value }) -join ', '; Write-Host ('live  : ' + $live); Write-Host ('local : ' + $local); if ($live -eq $local) { Write-Host 'VERIFIED: production serves this build'; exit 0 } else { Write-Host 'MISMATCH: production does not (yet) serve this build'; exit 16 }"
 if errorlevel 16 (echo Verify FAILED - redeploy before trusting the site. & pause & exit /b 16)
 
 echo.
