@@ -120,28 +120,54 @@ timestamp). No user accounts, no cookies, no telemetry.
 
 Hosted on **Cloudflare Pages**, project `report-ice-cube`.
 
-- Live: https://report-ice-cube.pages.dev/ (HTTP 200, `<title>Tracking Ice</title>`, verified 2026-11-06)
-- **No git repository is connected to the Pages project** (dashboard, Settings,
-  "Git repository: Connect"). Pushing to GitHub does NOT deploy anything.
-- Deploys are direct uploads from a local machine with `wrangler` (the dashboard
-  shows no build section, and this repo has no deploy script - the flow below is
-  inferred and should be confirmed by whoever deploys):
+- Live: https://report-ice-cube.pages.dev/ (HTTP 200, `<title>Tracking Ice</title>`)
+- Per-deployment URL example: https://793210df.report-ice-cube.pages.dev/
+- **No git repository is connected to the Pages project. Pushing to GitHub
+  deploys nothing.** Every deploy is a manual direct upload from your machine.
 
-  ```
-  npm run build
-  npx wrangler pages deploy dist --project-name=report-ice-cube
-  ```
+### How to deploy
 
-  with the Cloudflare API token from `cloudflare-key.txt` (local, git-ignored,
-  never committed) supplied as `CLOUDFLARE_API_TOKEN` or through npx.
-- Latest Production deploy at verification time: 2026-11-01, commit `bf72bae`
-  ("fix: improve compatibility for older browsers and devices"), status success.
-  HEAD (`51ab9b4`, gitignore-only) came after and is not part of that upload.
-  Any deploy is a snapshot of whatever `dist/` looked like on the deploying machine.
+1. Commit and push your changes to GitHub (bookkeeping; deploy does not use them)
+2. Build and upload:
+
+   ```
+   npm run build
+   npx --yes wrangler pages deploy dist --project-name=report-ice-cube --branch=main
+   ```
+
+   - `--branch=main` is what lands the upload on the **production** domain.
+     Without it, wrangler may stop at a preview URL.
+   - Auth is two environment variables: `CLOUDFLARE_API_TOKEN` and
+     `CLOUDFLARE_ACCOUNT_ID`. Both live in `cloudflare-key.txt`
+     (git-ignored, local only, never committed - see Repo hygiene). Read them
+     into the environment right before running, e.g.:
+
+     ```powershell
+     $lines = Get-Content cloudflare-key.txt
+     $env:CLOUDFLARE_API_TOKEN = $lines[8].Trim()   # API token (line 9)
+     $env:CLOUDFLARE_ACCOUNT_ID = $lines[4].Trim()  # account ID  (line 5)
+     ```
+
+3. Verify the production domain serves the new build:
+
+   ```powershell
+   (Invoke-WebRequest https://report-ice-cube.pages.dev/).Content
+   ```
+
+   The asset hashes it references must match the ones in your local
+   `dist/index.html`. If they differ, the deploy did not land - do not refresh
+   assumptions, redeploy.
+
+### Last verified deploy
+
+2026-11-07, wrangler 4.158.0, 36 files (7 changed), deployment `793210df`,
+serving commit `2edc379`. Asset check passed
+(`assets/index-C2633Bpa.js` / `index-TnDUHGMA.css` match local `dist/`).
+
 - `public/_headers` and `public/_redirects` ship with `dist/` and are honored by
   Cloudflare Pages.
-- Netlify is stale (its site 404s; its config and token are pending separate
-  cleanup). Do not re-add `netlify.toml`.
+- Netlify is stale and its config and token were removed from this repo. Do not
+  re-add `netlify.toml`.
 
 ## Repo hygiene
 
