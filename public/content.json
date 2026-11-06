@@ -229,6 +229,12 @@
     "src": "/media/crop-guide-v1.mp4",
     "fit": "contain"
   },
+  "instr.video.frame": {
+    "render": "image",
+    "src": "/utx_base_dialog_frame.png",
+    "fit": "stretch",
+    "scale": 100
+  },
   "result": {
     "render": "image",
     "src": "/dummy.png",

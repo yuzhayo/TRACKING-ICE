@@ -16,6 +16,8 @@
   const copyProps = $derived(propsFor('instr.crop'))
   const VideoComp = $derived(renderFor('instr.video'))
   const videoProps = $derived(propsFor('instr.video'))
+  const FrameComp = $derived(renderFor('instr.video.frame'))
+  const frameProps = $derived(propsFor('instr.video.frame'))
 </script>
 
 <PopupPlaceholder path="instr" {open} {onClose}>
@@ -29,6 +31,9 @@
     {#if open && VideoComp}
       <div class="instr-video" style={box('instr.video') + paint('instr.video')}>
         <VideoComp {...videoProps} label={t('instr.video')} />
+        {#if FrameComp}
+          <div class="instr-videoframe" style={box('instr.video.frame')} aria-hidden="true"><FrameComp {...frameProps} /></div>
+        {/if}
       </div>
     {/if}
   </div>
@@ -53,6 +58,11 @@
   .instr-video {
     position: absolute;
     background: var(--fill);
+  }
+
+  .instr-videoframe {
+    position: absolute;
+    pointer-events: none;
   }
 
   .art-layer {

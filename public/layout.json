@@ -854,6 +854,25 @@
           "on": false,
           "color": "#000000",
           "opacity": 0
+        },
+        "children": {
+          "frame": {
+            "top": 0,
+            "left": 0,
+            "width": 100,
+            "height": 100,
+            "z": 3,
+            "outline": {
+              "on": false,
+              "color": "#000000",
+              "opacity": 0
+            },
+            "placeholder": {
+              "on": false,
+              "color": "#000000",
+              "opacity": 0
+            }
+          }
         }
       }
     }
