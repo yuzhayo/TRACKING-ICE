@@ -30,10 +30,12 @@
     </div>
     {#if open && VideoComp}
       <div class="instr-video" style={box('instr.video') + paint('instr.video')}>
-        <VideoComp {...videoProps} label={t('instr.video')} />
-        {#if FrameComp}
-          <div class="instr-videoframe" style={box('instr.video.frame')} aria-hidden="true"><FrameComp {...frameProps} /></div>
-        {/if}
+        <div class="instr-video-thumb">
+          <VideoComp {...videoProps} label={t('instr.video')} />
+          {#if FrameComp}
+            <div class="instr-videoframe" aria-hidden="true"><FrameComp {...frameProps} /></div>
+          {/if}
+        </div>
       </div>
     {/if}
   </div>
@@ -57,11 +59,26 @@
 
   .instr-video {
     position: absolute;
+    box-sizing: border-box;
+    container-type: size;
+    display: grid;
+    place-items: center;
     background: var(--fill);
+  }
+
+  .instr-video-thumb {
+    position: relative;
+    width: min(100cqw, 94.8cqh);
+    /* Explicit height, not aspect-ratio (Safari 15+, Chrome 88+). 474 wide : 500 tall. */
+    height: calc(min(100cqw, 94.8cqh) * 1.05485);
+    overflow: hidden;
+    background: #0f172a;
   }
 
   .instr-videoframe {
     position: absolute;
+    inset: 0%;
+    z-index: 2;
     pointer-events: none;
   }
 

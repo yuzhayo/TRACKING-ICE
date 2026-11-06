@@ -8,8 +8,8 @@ One dotted path per box. The same path means the same box in all three JSON plan
 A path is **real** only if the box's file calls all three translators.
 A key no file reads is decoration - you edit it and nothing happens.
 
-**Total: 52 registered layout paths.** 1 canvas + 8 temp + 6 wheel + 6 calendar + 7 nominal/pad +
-7 upload/crop + 3 action + 3 actionPreview + 4 outletManual + 6 popup boxes + 1 info = 52.
+**Total: 51 registered layout paths.** 1 canvas + 8 temp + 6 wheel + 6 calendar + 7 nominal/pad +
+7 upload/crop + 3 action + 3 actionPreview + 4 outletManual + 5 popup boxes + 1 info = 51.
 
 ---
 
@@ -131,7 +131,7 @@ Shown only when a crop exists (`mainscreen.svelte:366` swaps `action` -> `action
 | `instr` | mainscreen | crop instruction popup |
 | `instr.crop` | instr | instruction text above the demonstration |
 | `instr.video` | instr | silent 4.5-second crop demonstration; mounted only while open |
-| `instr.video.frame` | instr.video | gold frame overlay (`utx_base_dialog_frame.png`) over the demo video; thumb concept |
+| `instr.video.frame` | instr.video | gold frame (`utx_base_dialog_frame.png`) over the demo video: thumb overlay `inset: 0%`, not a layout node |
 | `result` | mainscreen | send result (SENDING.../TERKIRIM/GAGAL) |
 
 ---
@@ -146,7 +146,7 @@ Shown only when a crop exists (`mainscreen.svelte:366` swaps `action` -> `action
 
 ## How to use this register
 
-- The register follows `public/layout.json`'s 52 paths. If layout.json gains or loses a
+- The register follows `public/layout.json`'s 51 paths. If layout.json gains or loses a
   node, this file follows (edit both in the same change).
 - Content entries and relevant text nodes must follow the registered paths. A `.disabled`-style
   dangling key in one file is decoration: edits to it change nothing.
@@ -170,5 +170,5 @@ Every box starts on `/dummy.png` (a transparent image). All three planes are ind
 `instr.video` in `layout.json`. Popup dismissal unmounts and pauses the player.*
 
 
-*Updated 2026-11-07: added `instr.video.frame` - gold frame sprite over the demo video,
-thumb concept. Total 52.*
+*Updated 2026-11-07: `instr.video.frame` reworked to the thumb concept - frame `inset: 0%` over a
+`min()`-sized 474:500 thumb box; no layout node under `instr.video`. Total 51 layout paths.*

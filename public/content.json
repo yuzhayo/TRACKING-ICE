@@ -227,7 +227,7 @@
   "instr.video": {
     "render": "video",
     "src": "/media/crop-guide-v1.mp4",
-    "fit": "contain"
+    "fit": "fill"
   },
   "instr.video.frame": {
     "render": "image",
