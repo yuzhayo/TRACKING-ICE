@@ -133,6 +133,6 @@
     background: rgba(10, 12, 18, 0.85);
     border: 1px solid rgba(255, 255, 255, 0.16);
     pointer-events: none;
-    font-family: system-ui, sans-serif;
+    font-family: inherit;
   }
 </style>

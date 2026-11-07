@@ -3,6 +3,9 @@
 Feature notes. Not plans to implement - the details and the go-ahead belong to
 the operator.
 
+**Implementation plan for "Check hasil input": see `CHECK-REPORT-PLAN.md`. That
+file is the contract; this one keeps the original operator notes for reference.**
+
 ---
 
 ## Check hasil input - planned 2026-11-07

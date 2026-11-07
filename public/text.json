@@ -1,12 +1,14 @@
 {
   "wheel": {
     "row2": {
-      "fontSize": "4cqi",
-      "align": "center"
+      "fontSize": "3.8cqi",
+      "align": "center",
+      "letterSpacing": "1px"
     },
     "list": {
-      "fontSize": "4cqi",
-      "align": "center"
+      "fontSize": "3.8cqi",
+      "align": "center",
+      "letterSpacing": "1px"
     },
     "prompt": {
       "ba": "SELECT NAME",
@@ -100,16 +102,46 @@
     "pickPrompt": "PILIH FOTO NOTA DARI GALLERY.",
     "pickBtn": "Pilih Foto"
   },
+  "checkReport": {
+    "header": {
+      "month": {
+        "text": "Bulan",
+        "fontSize": "15px",
+        "align": "center"
+      },
+      "close": {
+        "text": "TUTUP",
+        "fontSize": "15px",
+        "align": "center"
+      },
+      "title": "Check hasil input"
+    },
+    "detail": {
+      "cols": {
+        "date": "Tanggal",
+        "outlet": "Outlet",
+        "amount": "Nominal"
+      }
+    }
+  },
   "action": {
     "reset": {
-      "fontSize": "8cqi",
+      "fontSize": "9.5000cqi",
       "align": "center",
-      "text": "RESET"
+      "text": "RESET",
+      "letterSpacing": "1px"
     },
     "confirm": {
-      "fontSize": "8cqi",
+      "fontSize": "9.5000cqi",
       "align": "center",
-      "text": "CONFIRM"
+      "text": "CONFIRM",
+      "letterSpacing": "1px"
+    },
+    "check": {
+      "fontSize": "4.3846cqi",
+      "align": "center",
+      "text": "CHECK HASIL INPUT",
+      "letterSpacing": "1px"
     }
   },
   "btn": {
@@ -152,14 +184,16 @@
   },
   "actionPreview": {
     "reset": {
-      "fontSize": "8cqi",
+      "fontSize": "9.5000cqi",
       "align": "center",
-      "text": "RESET"
+      "text": "RESET",
+      "letterSpacing": "1px"
     },
     "confirm": {
-      "fontSize": "8cqi",
+      "fontSize": "9.5000cqi",
       "align": "center",
-      "text": "CONFIRM"
+      "text": "CONFIRM",
+      "letterSpacing": "1px"
     }
   },
   "outletManual": {

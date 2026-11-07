@@ -164,6 +164,32 @@
   "crop.confirm": {
     "render": "btn"
   },
+  "checkReport": {
+    "src": "/utx_base_deck_description.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "checkReport.header": {
+    "render": "image",
+    "src": "/utx_base_info_header02.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "checkReport.header.month": {
+    "render": "btn"
+  },
+  "checkReport.header.close": {
+    "render": "btn"
+  },
+  "checkReport.table": {
+    "render": "image",
+    "src": "/dummy.png",
+    "fit": "stretch",
+    "scale": 100
+  },
+  "action.check": {
+    "render": "btn"
+  },
   "action": {
     "render": "image",
     "src": "/dummy.png",

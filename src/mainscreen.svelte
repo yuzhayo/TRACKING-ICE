@@ -7,8 +7,12 @@
   import UploadPlaceholder from './upload-placeholder.svelte'
   import OutletManualPlaceholder from './outlet-manual-placeholder.svelte'
   import SendResultPopup from './send-result-popup.svelte'
+  import CheckReport from './check-report.svelte'
   import { cropDataUrl, loadImg } from './lib/crop'
   import { loadConfig, readOptionsCache, fetchOptions, submitAnswer } from './lib/api'
+  import {
+    refreshReports
+  } from './lib/reports'
   import { loadLayout, box, paint } from './lib/layout.svelte'
   import { loadText, t } from './lib/text.svelte'
   import { loadContent, renderFor, propsFor } from './lib/content.svelte'
@@ -35,6 +39,7 @@
 
   let cfg = $state(null)
   let submitting = $state(false)
+  let checkOpen = $state(false)
   let resultOpen = $state(false)
   let resultState = $state('idle')
   let resultMsg = $state('')
@@ -270,6 +275,7 @@
       const res = await submitAnswer(cfg, buildPayload())
       resultState = 'ok'
       resultMsg = 'Laporan berhasil dikirim.'
+      refreshReports(cfg.apiUrl, cfg.token).catch(() => {})
       clearFields()
     } catch (err) {
       resultState = 'fail'
@@ -378,9 +384,13 @@
     onReset={resetAll}
     onConfirm={submitReport}
     confirmReady={allAnswered}
+    checkVisible={!uploadCrop && answers.every((item) => !item) && !outletManual}
+    onCheck={() => (checkOpen = true)}
   />
 
   <SendResultPopup open={resultOpen} state={resultState} message={resultMsg} onClose={() => resultOpen = false} />
+
+  <CheckReport open={checkOpen} cfg={cfg} roster={baList} onClose={() => (checkOpen = false)} />
 </section>
 
 <style>

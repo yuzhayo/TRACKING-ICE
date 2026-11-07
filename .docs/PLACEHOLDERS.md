@@ -8,8 +8,8 @@ One dotted path per box. The same path means the same box in all three JSON plan
 A path is **real** only if the box's file calls all three translators.
 A key no file reads is decoration - you edit it and nothing happens.
 
-**Total: 50 registered layout paths.** 1 canvas + 8 temp + 6 wheel + 6 calendar + 7 nominal/pad +
-7 upload/crop + 3 action + 3 actionPreview + 4 outletManual + 5 popup boxes = 50.
+**Total: 57 registered layout paths.** 1 canvas + 8 temp + 6 wheel + 6 calendar + 7 nominal/pad +
+7 upload/crop + 4 action + 3 actionPreview + 4 outletManual + 5 popup boxes + 6 checkReport = 57.
 
 ---
 
@@ -109,6 +109,7 @@ Shown only when a crop exists (`mainscreen.svelte:366` swaps `action` -> `action
 | `actionPreview` | mainscreen | preview-state Reset + Confirm row |
 | `actionPreview.reset` | actionPreview | Reset button (preview) |
 | `actionPreview.confirm` | actionPreview | Confirm button (preview) |
+| `action.check` | action | "Check hasil input" trigger, visible only while no question answered |
 
 ---
 
@@ -122,6 +123,17 @@ Shown only when a crop exists (`mainscreen.svelte:366` swaps `action` -> `action
 | `outletManual.confirm` | outletManual | Confirm button |
 
 ---
+
+## L10a - Check report screen (6)
+
+| path | parent | purpose |
+|---|---|---|
+| `checkReport` | mainscreen | full-screen layer over the form; opened by the Check button |
+| `checkReport.header` | checkReport | pinned header bar (month dropdown + X), never scrolls |
+| `checkReport.header.month` | checkReport.header | month dropdown, default current month |
+| `checkReport.header.close` | checkReport.header | X close button |
+| `checkReport.table` | checkReport | BA list, one row per BA, name + total |
+| `checkReport.table.detail` | checkReport.table | expanded child rows; colloquial name only - no layout node, rendered statically inside the BA row |
 
 ## L10 - Popups (5)
 
@@ -145,7 +157,7 @@ Shown only when a crop exists (`mainscreen.svelte:366` swaps `action` -> `action
 
 ## How to use this register
 
-- The register follows `public/layout.json`'s 50 paths. If layout.json gains or loses a
+- The register follows `public/layout.json`'s 57 paths. If layout.json gains or loses a
   node, this file follows (edit both in the same change).
 - Content entries and relevant text nodes must follow the registered paths. A `.disabled`-style
   dangling key in one file is decoration: edits to it change nothing.
@@ -172,3 +184,8 @@ Every box starts on `/dummy.png` (a transparent image). All three planes are ind
 
 *Updated 2026-11-07: `instr.video.frame` reworked to the thumb concept - frame `inset: 0%` over a
 `min()`-sized 474:500 thumb box; no layout node under `instr.video`. `info` removed. Total 50 layout paths.*
+
+*Updated 2026-11-07: added `action.check` trigger and the `checkReport*` family (12 new
+components/nodes, 6 layout paths). `check-report-*` files are self-contained; the current app
+touches them only through the trigger button and a background `refreshReports()` after a
+successful answer submit.*

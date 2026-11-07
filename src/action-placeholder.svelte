@@ -4,6 +4,8 @@
   import './motion/animations.css'
   import { box, paint } from './lib/layout.svelte'
   import { renderFor, propsFor } from './lib/content.svelte'
+  import { t, s } from './lib/text.svelte'
+  import Btn from './component/Btn.svelte'
 
   let {
     path = '',
@@ -14,11 +16,14 @@
     onInEnd = () => {},
     onReset = () => {},
     onConfirm = () => {},
-    confirmReady = false
+    confirmReady = false,
+    checkVisible = false,
+    onCheck = () => {}
   } = $props()
 
   const ArtComp = $derived(renderFor(path))
   const artProps = $derived(propsFor(path))
+  const CheckComp = $derived(renderFor(`${path}.check`))
 
   function handleAnimationEnd(event) {
     if (event.animationName.includes('action-in-impact')) {
@@ -71,6 +76,12 @@
     disabled={!confirmReady}
     onClick={onConfirm}
   />
+
+  {#if checkVisible && CheckComp}
+    <div class="check-trigger" style={box(`${path}.check`)}>
+      <Btn label={t(`${path}.check`)} textStyle={s(`${path}.check`)} onClick={onCheck} />
+    </div>
+  {/if}
 </section>
 
 <style>
@@ -79,6 +90,11 @@
     inset: 0%;
     pointer-events: none;
     z-index: 0;
+  }
+
+  .check-trigger {
+    position: absolute;
+    box-sizing: border-box;
   }
 
   .action-placeholder {

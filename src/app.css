@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'SoulLand';
+  src: url('/fonts/soulLand.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0020-007E, U+00A0-00FF, U+2010-2027, U+2030, U+20AC, U+2190-2199, U+25A0-25FF, U+2713, U+FE0F;
+}
+
 *,
 *::before,
 *::after {
@@ -19,7 +28,14 @@ body {
   overflow: hidden;
   background: #05070c;
   color: #f8fafc;
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: 'SoulLand', system-ui, -apple-system, sans-serif;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }

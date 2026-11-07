@@ -4,10 +4,11 @@
    editing that file alone - no code change. Mirrors lib/layout.svelte.ts.
 
    A node may carry:
-     text     -> the string shown
-     fontSize -> CSS font-size value (e.g. "4cqi", "min(5cqi, 35cqb)")
-     fontWeight -> CSS font-weight value (e.g. "400", "700")
-     align    -> CSS text-align value (left | center | right)
+     text          -> the string shown
+     fontSize      -> CSS font-size value (e.g. "4cqi", "min(5cqi, 35cqb)")
+     fontWeight    -> CSS font-weight value (e.g. "400", "700")
+     align         -> CSS text-align value (left | center | right)
+     letterSpacing -> CSS letter-spacing value (e.g. "1px", "0.5px")
      ...or a plain string (a leaf label)
 
    t('wheel.prompt.ba')  -> the string at that path
@@ -19,7 +20,7 @@
 
 import { cqToVars } from './cq-units'
 
-type TextNode = string | { text?: string; fontSize?: string; fontWeight?: string; align?: string; [k: string]: unknown }
+type TextNode = string | { text?: string; fontSize?: string; fontWeight?: string; align?: string; letterSpacing?: string; [k: string]: unknown }
 type TextTree = Record<string, TextNode>
 
 const TEXT_CACHE_KEY = 'text:v1'
@@ -89,6 +90,7 @@ export function s(path: string): string {
   if (node.fontSize) parts.push(`font-size: ${cqToVars(node.fontSize)}`)
   if (node.fontWeight) parts.push(`font-weight: ${node.fontWeight}`)
   if (node.align) parts.push(`text-align: ${node.align}`)
+  if (node.letterSpacing) parts.push(`letter-spacing: ${node.letterSpacing}`)
   return parts.join('; ') + ';'
 }
 
