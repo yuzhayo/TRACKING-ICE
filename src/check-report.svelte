@@ -5,6 +5,7 @@
   import { t } from './lib/text.svelte'
   import {
     loadReports,
+    refreshReports,
     availableMonths,
     aggregate,
     readReportsCache
@@ -34,6 +35,7 @@
 
   let rows = $state<ReportRow[]>([])
   let loaded = $state(false)
+  let refreshing = $state(false)
 
   function monthOptions(list: ReportRow[]): string[] {
     // Only months that actually appear in jawaban (+ current month as fallback
@@ -79,6 +81,21 @@
     }
   }
 
+  async function refresh() {
+    if (refreshing || !cfg) return
+    refreshing = true
+    try {
+      const fresh = await refreshReports(cfg.apiUrl, cfg.token)
+      rows = fresh
+      months = monthOptions(fresh)
+      if (month && !months.includes(month)) month = months[0] ?? month
+    } catch {
+      // keep the rows already on screen - a failed refresh must not blank the table
+    } finally {
+      refreshing = false
+    }
+  }
+
   $effect(() => {
     if (open) untrack(() => void boot())
   })
@@ -104,6 +121,8 @@
       month={month}
       total={monthTotal}
       onMonth={(m) => (month = m)}
+      onRefresh={refresh}
+      refreshDisabled={refreshing || !cfg}
       onClose={onClose}
     />
     <CheckReportTable

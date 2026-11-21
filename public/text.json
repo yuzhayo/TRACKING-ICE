@@ -106,15 +106,20 @@
     "header": {
       "month": {
         "text": "Bulan",
-        "fontSize": "15px",
+        "fontSize": "16px",
         "align": "center"
       },
       "close": {
         "text": "TUTUP",
-        "fontSize": "15px",
+        "fontSize": "16px",
         "align": "center"
       },
-      "title": "Check hasil input"
+      "title": "Check hasil input",
+      "refresh": {
+        "text": "REFRESH",
+        "fontSize": "16px",
+        "align": "center"
+      }
     },
     "detail": {
       "cols": {

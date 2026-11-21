@@ -22,6 +22,7 @@ body,
   height: 100%;
   min-height: 100vh;
   min-height: 100dvh;
+  overflow: hidden;
 }
 
 body {
@@ -31,6 +32,10 @@ body {
   font-family: 'SoulLand', system-ui, -apple-system, sans-serif;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  /* Chrome mobile inflates text on reload (font boosting) which blows the
+     percentage layout out of the screen. Pin it to the declared size. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 button,
@@ -38,4 +43,14 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+/* Mobile browsers auto-zoom the whole page when a form control under 16px gets
+   focus, and that zoom persists across refresh - the page then looks cropped on
+   the right and bottom even though every box is still a percentage. Keeping the
+   controls at 16px stops the zoom without taking pinch-zoom away from the user. */
+input,
+select,
+textarea {
+  font-size: 16px;
 }

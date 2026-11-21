@@ -10,19 +10,24 @@
     month = '',
     total = 0,
     onMonth = (_m: string) => {},
-    onClose = () => {}
+    onRefresh = () => {},
+    onClose = () => {},
+    refreshDisabled = false
   }: {
     path?: string
     months?: string[]
     month?: string
     total?: number
     onMonth?: (m: string) => void
+    onRefresh?: () => void
     onClose?: () => void
+    refreshDisabled?: boolean
   } = $props()
 
   const ArtComp = $derived(renderFor(path))
   const artProps = $derived(propsFor(path))
   const MonthComp = $derived(renderFor(`${path}.month`))
+  const RefreshComp = $derived(renderFor(`${path}.refresh`))
   const CloseComp = $derived(renderFor(`${path}.close`))
 
   function monthName(key: string): string {
@@ -50,6 +55,11 @@
   </div>
   <div class="sep" aria-hidden="true"></div>
   <div class="month-total" aria-label="Total bulan ini">{formatRp(total)}</div>
+  <div class="refresh-slot">
+    {#if RefreshComp}
+      <RefreshComp label={t(`${path}.refresh`)} textStyle={s(`${path}.refresh`)} onClick={onRefresh} disabled={refreshDisabled} />
+    {/if}
+  </div>
   <div class="close-slot">
     {#if CloseComp}
       <CloseComp label={t(`${path}.close`)} textStyle={s(`${path}.close`)} onClick={onClose} />
@@ -67,7 +77,7 @@
     container-type: size;
     display: flex;
     align-items: center;
-    gap: 4cqi;
+    gap: 2cqi;
     padding: 2% 3%;
     box-sizing: border-box;
     background: var(--fill);
@@ -140,6 +150,20 @@
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.25;
+  }
+
+  .refresh-slot {
+    position: relative;
+    z-index: 1;
+    flex: 0 0 18%;
+    min-width: 0;
+    height: 62%;
+    align-self: center;
+    display: flex;
+  }
+
+  .refresh-slot :global(.btn) {
+    flex: 1;
   }
 
   .close-slot {

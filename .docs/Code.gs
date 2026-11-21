@@ -23,6 +23,12 @@ const CONFIG = {
     ba: 'NAMA BA',
     outlet: 'OUTLET',
   },
+  reportColumns: {
+    namaBA: 'Nama BA',
+    tanggal: 'Tanggal',
+    nominal: 'Nominal',
+  },
+  reportMonths: 3, // bulan berjalan + 2 bulan sebelumnya
   limits: {
     maxImageBytes: 1.5 * 1024 * 1024, // 1.5 MB setelah base64 decode (Fix M11)
     maxNominalDigits: 12,
@@ -146,31 +152,121 @@ function doPost(e) {
 // ============================================================================
 
 /**
- * Baca baris laporan mentah dari tab Opsi kolom D:G
- * (Nama BA | Outlet | Tanggal | Nominal).
- * Server hanya baca + kirim mentah; agregasi/filter per bulan di client
- * (src/lib/reports.ts). Tanggal disimpan sebagai ISO yyyy-mm-dd supaya
- * client tidak menebak format.
+ * Temukan kolom laporan dari BARIS HEADER tab Jawaban.
+ * Jalur cepat: B=Nama BA, E=Tanggal, F=Nominal.
+ * Kalau ada yang tidak cocok, sapu semua kolom; kalau tetap tidak ketemu,
+ * lempar error supaya tidak ada data setengah benar yang dikirim ke client.
+ */
+function findReportColumns_(header) {
+  const need = CONFIG.reportColumns;
+  const fast = { namaBA: 1, tanggal: 4, nominal: 5 }; // B, E, F (0-based)
+  const keys = Object.keys(need);
+  const fastOk = keys.every(k => norm_(header[fast[k]]) === norm_(need[k]));
+  if (fastOk) return fast;
+
+  const found = {};
+  keys.forEach(k => {
+    const target = norm_(need[k]);
+    let idx = -1;
+    for (let i = 0; i < header.length; i++) {
+      if (norm_(header[i]) === target) { idx = i; break; }
+    }
+    if (idx < 0) {
+      throw new Error('Kolom "' + need[k] + '" tidak ditemukan di header tab ' + CONFIG.tabs.answers + '.');
+    }
+    found[k] = idx;
+  });
+  return found;
+}
+
+/**
+ * Batas bawah tanggal yang masih dikirim: hari pertama bulan (sekarang - 2).
+ * November -> 09-01, jadi yang dikirim Nov + Okt + Sep.
+ */
+function cutoffDate_() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth() - (CONFIG.reportMonths - 1), 1);
+}
+
+/**
+ * Hapus baris Jawaban yang tanggalnya di bawah cutoff.
+ * Baris tanpa tanggal yang bisa diparse tidak dihapus.
+ * Hapus dari bawah ke atas supaya index tidak bergeser. Baris header (1) aman.
+ */
+function pruneOldRows_(sh, colTanggal, cutoff) {
+  const last = sh.getLastRow();
+  if (last < 2) return 0;
+  const values = sh.getRange(2, 1, last - 1, sh.getLastColumn()).getValues();
+  const toDelete = [];
+  for (let i = 0; i < values.length; i++) {
+    const raw = values[i][colTanggal];
+    let d = null;
+    if (raw instanceof Date) d = raw;
+    else if (typeof raw === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(raw.trim())) {
+      d = dateFromIso_(raw.trim());
+    }
+    if (d && d < cutoff) toDelete.push(i + 2); // +2 = baris sheet (header di baris 1)
+  }
+  for (let i = toDelete.length - 1; i >= 0; i--) {
+    sh.deleteRow(toDelete[i]);
+  }
+  return toDelete.length;
+}
+
+/**
+ * Baca laporan dari tab Jawaban (B=Nama BA, E=Tanggal, F=Nominal secara default).
+ * Semua kolom dibaca; header diverifikasi dulu lewat findReportColumns_.
+ * Hanya {namaBA, tanggal, nominal} yang dikirim; baris lebih tua dari cutoff
+ * dihapus dari sheet dalam LockService yang sama.
  */
 function readReports_(ss) {
-  const sh = sheet_(ss, CONFIG.tabs.options);
-  const values = sh.getRange('D:G').getValues();
+  const sh = sheet_(ss, CONFIG.tabs.answers);
+  const data = sh.getDataRange().getValues();
+  if (data.length === 0) {
+    throw new Error('Tab ' + CONFIG.tabs.answers + ' masih kosong.');
+  }
+
+  const header = data[0].map(h => clean_(h));
+  const col = findReportColumns_(header);
+  const cutoff = cutoffDate_();
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  let deleted = 0;
+  try {
+    deleted = pruneOldRows_(sh, col.tanggal, cutoff);
+  } finally {
+    if (lock.hasLock()) lock.releaseLock();
+  }
+
   const out = [];
-  for (let i = 0; i < values.length; i++) {
-    const r = values[i];
-    const namaBA = clean_(r[0]);
-    if (!namaBA) continue;
-    // Lewati baris header apa pun posisinya (mis. "NAMA BA").
-    if (key_(namaBA) === key_(CONFIG.optionColumns.ba)) continue;
-    const outlet = clean_(r[1]);
-    let tanggal = r[2];
-    if (tanggal instanceof Date) {
-      tanggal = Utilities.formatDate(tanggal, CONFIG.timeZone, 'yyyy-MM-dd');
+  for (let i = 1; i < data.length; i++) {
+    const r = data[i];
+    const namaBA = clean_(r[col.namaBA]);
+    if (!namaBA || key_(namaBA) === key_(CONFIG.optionColumns.ba)) continue;
+
+    let d = null;
+    let tanggal;
+    const rawTgl = r[col.tanggal];
+    if (rawTgl instanceof Date) {
+      d = rawTgl;
+      tanggal = Utilities.formatDate(d, CONFIG.timeZone, 'yyyy-MM-dd');
     } else {
-      tanggal = String(tanggal == null ? '' : tanggal).trim();
+      tanggal = clean_(rawTgl);
+      if (/^\d{4}-\d{2}-\d{2}$/.test(tanggal) && isRealDate_(tanggal)) {
+        d = dateFromIso_(tanggal);
+      }
     }
-    const nominal = Number(r[3]) || 0;
-    out.push({ namaBA: namaBA, outlet: outlet, tanggal: tanggal, nominal: nominal });
+    // Tanggal tidak dikenal -> lewati, jangan kirim ke client.
+    if (!d) continue;
+    // Baris yang baru saja dihapus tidak ikut dikirim.
+    if (d < cutoff) continue;
+
+    out.push({
+      namaBA: namaBA,
+      tanggal: tanggal,
+      nominal: Number(r[col.nominal]) || 0
+    });
   }
   return out;
 }

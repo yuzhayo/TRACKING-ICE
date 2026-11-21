@@ -290,5 +290,8 @@
     "base": "/key_base.png",
     "press": "/key_press.png",
     "off": "/key_off.png"
+  },
+  "checkReport.header.refresh": {
+    "render": "btn"
   }
 }

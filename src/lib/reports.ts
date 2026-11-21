@@ -6,7 +6,6 @@
 
 export interface ReportRow {
   namaBA: string
-  outlet: string
   tanggal: string
   nominal: number
 }
@@ -52,14 +51,16 @@ async function fetchRemote(apiUrl: string, token: string): Promise<ReportRow[]> 
     if (!json.ok || !Array.isArray(json.data)) {
       throw new Error(json.error || 'Action reports belum tersedia di server.')
     }
-    const rows = json.data
-      .map((r) => ({
-        namaBA: String(r.namaBA ?? '').trim(),
-        outlet: String(r.outlet ?? '').trim(),
-        tanggal: String(r.tanggal ?? ''),
-        nominal: Number(r.nominal) || 0
-      }))
-      .filter((r) => r.namaBA)
+    const rows: ReportRow[] = []
+    for (const r of json.data) {
+      const row = r as Partial<ReportRow>
+      const namaBA = String(row.namaBA ?? '').trim()
+      const tanggal = String(row.tanggal ?? '').trim()
+      // Terima hanya ISO yyyy-MM-dd yang benar. Baris invalid dibuang,
+      // bukan ditebak - menebak format adalah sumber bug lama.
+      if (!namaBA || !parseTanggal(tanggal)) continue
+      rows.push({ namaBA, tanggal, nominal: Number(row.nominal) || 0 })
+    }
     writeCache(rows)
     return rows
   } finally {
@@ -68,18 +69,13 @@ async function fetchRemote(apiUrl: string, token: string): Promise<ReportRow[]> 
 }
 
 export async function loadReports(apiUrl: string, token: string): Promise<ReportRow[]> {
-  const cached = readReportsCache()
-  if (cached) {
-    // Paint from cache, refresh in the background; caller re-reads when ready.
-    fetchRemote(apiUrl, token).catch(() => {
-      // server belum punya action=reports atau offline - keep cache
-    })
-    return cached
-  }
+  // Selalu pakai hasil network. Cache hanya untuk lukis awal di boot() dan
+  // sebagai fallback saat offline - bukan hasil yang dibuang seperti sebelumnya.
   try {
     return await fetchRemote(apiUrl, token)
   } catch (err) {
-    if (readReportsCache()) return readReportsCache() as ReportRow[]
+    const cached = readReportsCache()
+    if (cached && cached.length > 0) return cached
     throw err instanceof Error ? err : new Error('Gagal memuat data reports.')
   }
 }
@@ -89,28 +85,22 @@ export async function refreshReports(apiUrl: string, token: string): Promise<Rep
 }
 
 /* ---------- date parsing ----------
-   Sheet stores dates as text; observed shapes: M/D/YYYY (jawaban cols) or D/M/YYYY.
-   Ambiguity cannot be resolved here - we take the LAST token as the year and treat
-   tokens[1] as day only when it is > 12, otherwise tokens[0] is assumed month.
-   If the server ever exports ISO dates, this short-circuits first. */
+   Server mengirim ISO yyyy-mm-dd. Terima HANYA bentuk itu dan tanggal yang nyata.
+   Heuristik M/D vs D/M dihapus - menebak format adalah sumber bug lama. */
 export interface ParsedDate { y: number; m: number; d: number }
 
 export function parseTanggal(raw: string): ParsedDate | null {
-  const s = String(raw).trim()
-  const iso = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/)
-  if (iso) return { y: +iso[1], m: +iso[2], d: +iso[3] }
-  const parts = s.split(/[/.\-]/).map((p) => p.trim()).filter(Boolean)
-  if (parts.length === 3) {
-    const a = +parts[0], b = +parts[1], c = +parts[2]
-    if (Number.isFinite(a) && Number.isFinite(b) && Number.isFinite(c)) {
-      const y = c < 100 ? 2000 + c : c
-      let m = a, d = b
-      // if second field > 12 it must be the day (M/D/YYYY), else assume D/M/YYYY when first > 12
-      if (b > 12) { m = a; d = b } else if (a > 12) { d = a; m = b }
-      return { y, m, d }
-    }
+  const s = String(raw ?? '').trim()
+  const iso = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s)
+  if (!iso) return null
+  const y = +iso[1], m = +iso[2], d = +iso[3]
+  if (m < 1 || m > 12 || d < 1 || d > 31) return null
+  // Tolak tanggal tidak nyata (mis. 2026-02-30).
+  const probe = new Date(Date.UTC(y, m - 1, d))
+  if (probe.getUTCFullYear() !== y || probe.getUTCMonth() !== m - 1 || probe.getUTCDate() !== d) {
+    return null
   }
-  return null
+  return { y, m, d }
 }
 
 export function monthKey(p: ParsedDate): string {
